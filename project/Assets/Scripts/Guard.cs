@@ -25,7 +25,7 @@ public class Guard : MonoBehaviour {
 			playerInSight = false;
 
 			Vector3 direction = player.transform.position - transform.position;
-			float angle = Vector3.Angle(direction, transform.forward);
+			float angle = Vector3.Angle(direction, -transform.forward);
 
 			if(angle < fovAngle * 0.5f)
 			{
@@ -50,10 +50,5 @@ public class Guard : MonoBehaviour {
 		{
 			playerInSight = false;
 		}
-	}
-
-	void FixedUpdate()
-	{
-
 	}
 }
