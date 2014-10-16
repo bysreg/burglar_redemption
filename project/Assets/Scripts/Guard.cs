@@ -14,6 +14,8 @@ public class Guard : MonoBehaviour {
 	{
 		player = GameObject.FindGameObjectWithTag("Player");
 		sphereCol = GetComponent<SphereCollider>();
+		GameObject gameController = GameObject.FindGameObjectWithTag("GameController");
+		lastPlayerSighting = gameController.GetComponent<LastPlayerSighting>();
 	}
 
 	void OnTriggerStay(Collider other)
@@ -34,6 +36,8 @@ public class Guard : MonoBehaviour {
 					if(hit.collider.gameObject == player)
 					{
 						playerInSight = true;
+
+						lastPlayerSighting.position = player.transform.position;
 					}
 				}
 			}
