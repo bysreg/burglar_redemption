@@ -18,7 +18,7 @@ public class GuardAI : MonoBehaviour {
 
 	void Update()
 	{
-		Patrolling();
+		//Patrolling();
 	}
 
 	void Patrolling()

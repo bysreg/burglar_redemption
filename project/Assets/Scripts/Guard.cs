@@ -2,8 +2,7 @@
 using System.Collections;
 
 public class Guard : MonoBehaviour {
-
-	public float fovAngle = 110f; //degrees that the guard can see
+	
 	public Texture2D standTexture;
 	public Texture2D[] walkHorTextures;
 	public float walkHorFrameTime;
@@ -11,11 +10,6 @@ public class Guard : MonoBehaviour {
 	public float walkUpFrameTime;
 	public Texture2D[] walkDownTextures;
 	public float walkDownFrameTime;
-
-	GameObject player;
-	bool playerInSight;
-	SphereCollider sphereCol;
-	LastPlayerSighting lastPlayerSighting;
 
 	Material guardMat;
 	float animTime;
@@ -29,11 +23,6 @@ public class Guard : MonoBehaviour {
 
 	void Awake()
 	{
-		player = GameObject.FindGameObjectWithTag("Player");
-		sphereCol = GetComponent<SphereCollider>();
-		GameObject gameController = GameObject.FindGameObjectWithTag("GameController");
-		lastPlayerSighting = gameController.GetComponent<LastPlayerSighting>();
-
 		graphic = transform.Find("Graphic").gameObject;
 		guardMat = graphic.GetComponent<MeshRenderer>().material;
 		prevWalkingDir = -1;
@@ -85,49 +74,18 @@ public class Guard : MonoBehaviour {
 		}
 	}
 
-	void OnTriggerStay(Collider other)
-	{
-		if(other.gameObject == player)
-		{
-			playerInSight = false;
-
-			Vector3 direction = player.transform.position - transform.position;
-			float angle = Vector3.Angle(direction, -transform.forward);
-
-			if(angle < fovAngle * 0.5f)
-			{
-				RaycastHit hit;
-
-				if(Physics.Raycast(transform.position, direction.normalized, out hit, sphereCol.radius))
-				{
-					if(hit.collider.gameObject == player)
-					{
-						playerInSight = true;
-
-						lastPlayerSighting.position = player.transform.position;
-					}
-				}
-			}
-		}
-	}
-
-	void OnTriggerExit(Collider other)
-	{
-		if(other.gameObject == player)
-		{
-			playerInSight = false;
-		}
-	}
-
 	void Update()
 	{
 		prevWalkingDir = walkingDir;
 		walkingDir = -1;
 
 		Vector3 direction = nav.velocity;
-		print (direction);
 
-		if(Mathf.Abs(direction.x) > Mathf.Abs(direction.z))
+		if(direction == Vector3.zero)
+		{
+			walkingDir = -1;
+		}
+		else if(Mathf.Abs(direction.x) > Mathf.Abs(direction.z))
 		{
 			if(direction.x > 0) // right
 			{
@@ -153,5 +111,10 @@ public class Guard : MonoBehaviour {
 		}
 
 		AnimWalk();
+	}
+
+	public int GetFaceDir()
+	{
+		return walkingDir;
 	}
 }
