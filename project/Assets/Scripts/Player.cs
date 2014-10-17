@@ -31,9 +31,10 @@ public class Player : MonoBehaviour {
 		prevWalkingDir = -1;
 		walkingDir = -1;
 		walkTextures = walkHorTextures;
+		frameTime = walkHorFrameTime;
 	}
 
-	void Update()
+	void AnimWalk()
 	{
 		if(prevWalkingDir != walkingDir)
 		{
@@ -62,15 +63,15 @@ public class Player : MonoBehaviour {
 				playerMat.mainTexture = standTexture;
 			}
 		}
-
+		
 		if(walkingDir != -1)
 		{
-			animTime += Time.deltaTime;
+			animTime += Time.fixedDeltaTime;
 			if(animTime >= frameTime)
 			{
 				animTime -= frameTime;
 				frameIndex = (frameIndex + 1) % walkTextures.Length;
-
+				
 				playerMat.mainTexture = walkTextures[frameIndex];
 			}
 		}
@@ -111,6 +112,8 @@ public class Player : MonoBehaviour {
 		{
 			rigidbody.MovePosition(newPos);
 		}
+
+		AnimWalk();
 	}
 
 	void MoveUp(ref Vector3 pos)
