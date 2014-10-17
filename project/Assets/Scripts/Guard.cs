@@ -20,6 +20,8 @@ public class Guard : MonoBehaviour {
 	Texture2D[] walkTextures;
 	GameObject graphic;
 	NavMeshAgent nav;
+	GameController gameController;
+	GameObject player;
 
 	void Awake()
 	{
@@ -29,6 +31,8 @@ public class Guard : MonoBehaviour {
 		walkingDir = -1;
 		walkTextures = walkHorTextures;
 		nav = GetComponent<NavMeshAgent>();
+		player = GameObject.FindGameObjectWithTag("Player");
+		gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
 	}
 
 	void AnimWalk()
@@ -71,6 +75,15 @@ public class Guard : MonoBehaviour {
 				
 				guardMat.mainTexture = walkTextures[frameIndex];
 			}
+		}
+	}
+
+	void OnCollisionEnter(Collision other)
+	{
+		if(other.gameObject == player)
+		{
+			//game over
+			gameController.GameOver();
 		}
 	}
 

@@ -5,9 +5,10 @@ public class GuardSight : MonoBehaviour {
 
 	public float fovAngle = 110f; //degrees that the guard can see
 	public bool debugSight;
+	public bool playerInSight;
+	public Vector3 personalLastSighting;
 
 	GameObject player;
-	bool playerInSight;
 	SphereCollider sphereCol;
 	LastPlayerSighting lastPlayerSighting;
 	Guard guard;
@@ -25,6 +26,8 @@ public class GuardSight : MonoBehaviour {
 		lastPlayerSighting = gameController.GetComponent<LastPlayerSighting>();
 		guard = GetComponent<Guard>();
 		lookDir = -transform.forward;
+
+		personalLastSighting = lastPlayerSighting.resetPosition;
 	}
 
 	void FixedUpdate()
@@ -45,6 +48,7 @@ public class GuardSight : MonoBehaviour {
 			lookDir = -transform.right;
 			break;
 		}
+
 	}
 
 	void OnTriggerStay(Collider other)
@@ -66,6 +70,7 @@ public class GuardSight : MonoBehaviour {
 						playerInSight = true;
 						
 						lastPlayerSighting.position = player.transform.position;
+						personalLastSighting = player.transform.position;
 					}
 				}
 			}
