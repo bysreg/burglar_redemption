@@ -90,12 +90,12 @@ public class Guard : MonoBehaviour {
 			if(direction.x > 0) // right
 			{
 				walkingDir = 2;
-				graphic.transform.localScale = new Vector3(1, 1, 1);
+				graphic.transform.localScale = new Vector3(graphic.transform.localScale.y, graphic.transform.localScale.y, graphic.transform.localScale.z);
 			}
 			else // left
 			{
 				walkingDir = 3;
-				graphic.transform.localScale = new Vector3(-1, 1, 1);
+				graphic.transform.localScale = new Vector3(-graphic.transform.localScale.y, graphic.transform.localScale.y, graphic.transform.localScale.z);
 			}
 		}
 		else
@@ -115,6 +115,6 @@ public class Guard : MonoBehaviour {
 
 	public int GetFaceDir()
 	{
-		return walkingDir;
+		return walkingDir == -1 ? 1 : walkingDir;
 	}
 }

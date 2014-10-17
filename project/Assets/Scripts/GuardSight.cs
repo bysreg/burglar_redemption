@@ -11,6 +11,7 @@ public class GuardSight : MonoBehaviour {
 	SphereCollider sphereCol;
 	LastPlayerSighting lastPlayerSighting;
 	Guard guard;
+	Vector3 lookDir;
 
 	//debug
 	Vector3 debugLeftSightDir;
@@ -23,6 +24,27 @@ public class GuardSight : MonoBehaviour {
 		GameObject gameController = GameObject.FindGameObjectWithTag("GameController");
 		lastPlayerSighting = gameController.GetComponent<LastPlayerSighting>();
 		guard = GetComponent<Guard>();
+		lookDir = -transform.forward;
+	}
+
+	void FixedUpdate()
+	{
+		switch(guard.GetFaceDir())
+		{
+		case 0 :
+			lookDir = transform.forward;
+			break;
+		case 1 :
+			lookDir = -transform.forward;
+			break;
+		case 2 :
+			lookDir = transform.right;
+			break;
+		case 3 :
+		default :
+			lookDir = -transform.right;
+			break;
+		}
 	}
 
 	void OnTriggerStay(Collider other)
@@ -30,9 +52,8 @@ public class GuardSight : MonoBehaviour {
 		if(other.gameObject == player)
 		{
 			playerInSight = false;
-			
 			Vector3 direction = player.transform.position - transform.position;
-			float angle = Vector3.Angle(direction, -transform.forward);
+			float angle = Vector3.Angle(direction, lookDir);
 			
 			if(angle < fovAngle * 0.5f)
 			{
@@ -69,32 +90,10 @@ public class GuardSight : MonoBehaviour {
 
 	void DebugSight()
 	{	
-		int dir = guard.GetFaceDir();
+		debugLeftSightDir = Quaternion.Euler(0, -fovAngle / 2, 0) * lookDir;
+		debugRightSightDir = Quaternion.Euler(0, fovAngle / 2, 0) * lookDir; 
 
-		switch(dir)
-		{
-		case 0:
-			debugLeftSightDir = Quaternion.Euler(0, fovAngle / 2, 0) * transform.forward;
-			debugRightSightDir = Quaternion.Euler(0, -fovAngle / 2, 0) * transform.forward;
-			break;
-
-		case 1:
-			debugLeftSightDir = Quaternion.Euler(0, -fovAngle / 2, 0) * -transform.forward;
-			debugRightSightDir = Quaternion.Euler(0, fovAngle / 2, 0) * -transform.forward;
-			break;
-
-		case 2:
-			debugLeftSightDir = Quaternion.Euler(0, fovAngle / 2, 0) * transform.right;
-			debugRightSightDir = Quaternion.Euler(0, fovAngle / 2, 0) * transform.right;
-			break;
-
-		case 3:
-		default:
-			debugLeftSightDir = Quaternion.Euler(0, -fovAngle / 2, 0) * -transform.right;
-			debugRightSightDir = Quaternion.Euler(0, fovAngle / 2, 0) * -transform.right;
-			break;
-		}
-
-
+		Debug.DrawRay(transform.position, debugLeftSightDir * sphereCol.radius, Color.yellow);
+		Debug.DrawRay(transform.position, debugRightSightDir * sphereCol.radius, Color.yellow);
 	}
 }
