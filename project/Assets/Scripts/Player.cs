@@ -82,62 +82,63 @@ public class Player : MonoBehaviour {
 		prevWalkingDir = walkingDir;
 		walkingDir = -1;
 		Vector3 newPos = transform.position;
+		Vector3 direction = Vector3.zero;
 
 		if(simulateWithKeyboard)
 		{
 			//up
 			if(Input.GetKey(KeyCode.W))
 			{
-				MoveUp(ref newPos);
+				MoveUp(ref direction);
 			}
 			//down
 			else if(Input.GetKey(KeyCode.S))
 			{
-				MoveDown(ref newPos);
+				MoveDown(ref direction);
 			}
 
 			//right
 			if(Input.GetKey(KeyCode.D))
 			{
-				MoveRight(ref newPos);
+				MoveRight(ref direction);
 			}
 			//left
 			else if(Input.GetKey(KeyCode.A))
 			{
-				MoveLeft(ref newPos);
+				MoveLeft(ref direction);
 			}
 		}
 
 		if(walkingDir != -1)
 		{
-			rigidbody.MovePosition(newPos);
+			rigidbody.MovePosition(transform.position + direction.normalized * speed * Time.fixedDeltaTime);
 		}
 
 		AnimWalk();
 	}
 
-	void MoveUp(ref Vector3 pos)
+	void MoveUp(ref Vector3 direction)
 	{
-		pos = pos + transform.forward * speed * Time.fixedDeltaTime;
+		direction.z = 1;
 		walkingDir = 0;
 	}
 
-	void MoveDown(ref Vector3 pos)
+	void MoveDown(ref Vector3 direction)
 	{
-		pos = pos + -transform.forward * speed * Time.fixedDeltaTime;
+		direction.z = -1;
 		walkingDir = 1;
 	}
 
-	void MoveRight(ref Vector3 pos)
+	void MoveRight(ref Vector3 direction)
 	{
-		pos = pos + transform.right * speed * Time.fixedDeltaTime;
+		direction.x = 1;
 		walkingDir = 2;
 		graphic.transform.localScale = new Vector3(1, 1, 1);
 	}
 
-	void MoveLeft(ref Vector3 pos)
+	void MoveLeft(ref Vector3 direction)
 	{
-		pos = pos + -transform.right * speed * Time.fixedDeltaTime;
+		direction.x = -1;
 		walkingDir = 3;
 		graphic.transform.localScale = new Vector3(-1, 1, 1);
 	}
