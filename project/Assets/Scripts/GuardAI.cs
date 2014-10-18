@@ -18,6 +18,13 @@ public class GuardAI : MonoBehaviour {
 	GameObject player;
 	LastPlayerSighting lastPlayerSighting;
 
+	//debugging
+	string patrolling = "patrolling";
+	string chasing = "chasing";
+	string waitingAfterChase = "waiting after chase";
+	string waitingAfterPatrol = "waiting after patrol";
+	string guardState;
+
 	void Awake()
 	{
 		nav = GetComponent<NavMeshAgent>();
@@ -42,12 +49,14 @@ public class GuardAI : MonoBehaviour {
 
 	void Patrolling()
 	{
+		guardState = patrolling;
 		nav.speed = patrolSpeed;
 
 		if(nav.remainingDistance <= nav.stoppingDistance)
 		{
 			//print (patrolTimer);
 			patrolTimer += Time.deltaTime;
+			guardState = waitingAfterPatrol;
 
 			if(patrolTimer >= patrolWaitTime)
 			{
@@ -64,6 +73,7 @@ public class GuardAI : MonoBehaviour {
 
 	void Chasing()
 	{
+		guardState = chasing;
 		Vector3 sightingDir = guardSight.personalLastSighting - transform.position;
 
 		if(sightingDir.sqrMagnitude > 4f)
@@ -76,6 +86,7 @@ public class GuardAI : MonoBehaviour {
 		if(nav.remainingDistance < nav.stoppingDistance)
 		{
 			chaseTimer += Time.deltaTime;
+			guardState = waitingAfterChase;
 
 			if(chaseTimer >= chaseWaitTime)
 			{
@@ -84,6 +95,11 @@ public class GuardAI : MonoBehaviour {
 				guardSight.personalLastSighting = lastPlayerSighting.resetPosition;
 			}
 		}
+	}
+
+	public string GetGuardState()
+	{
+		return guardState;
 	}
 
 }
