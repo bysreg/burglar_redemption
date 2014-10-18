@@ -81,7 +81,6 @@ public class Player : MonoBehaviour {
 	{
 		prevWalkingDir = walkingDir;
 		walkingDir = -1;
-		Vector3 newPos = transform.position;
 		Vector3 direction = Vector3.zero;
 
 		if(simulateWithKeyboard)
