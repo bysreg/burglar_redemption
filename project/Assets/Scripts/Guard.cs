@@ -15,6 +15,8 @@ public class Guard : MonoBehaviour {
 	float animTime;
 	int walkingDir;
 	int prevWalkingDir;
+	Vector3 prevWalkingV;
+	Vector3 walkingV;
 	int frameIndex;
 	float frameTime;
 	Texture2D[] walkTextures;
@@ -65,7 +67,7 @@ public class Guard : MonoBehaviour {
 			}
 		}
 		
-		if(walkingDir != -1)
+		if(nav.velocity != Vector3.zero)
 		{
 			animTime += Time.fixedDeltaTime;
 			if(animTime >= frameTime)
@@ -90,37 +92,39 @@ public class Guard : MonoBehaviour {
 	void Update()
 	{
 		prevWalkingDir = walkingDir;
-		walkingDir = -1;
+		prevWalkingV = walkingV;
+		walkingV = nav.velocity;
 
-		Vector3 direction = nav.velocity;
-
-		if(direction == Vector3.zero)
+		if(walkingV != Vector3.zero)
 		{
-			walkingDir = -1;
+			if(Mathf.Abs(walkingV.x) > Mathf.Abs(walkingV.z))
+			{
+				if(walkingV.x > 0) // right
+				{
+					walkingDir = 2;
+					graphic.transform.localScale = new Vector3(graphic.transform.localScale.y, graphic.transform.localScale.y, graphic.transform.localScale.z);
+				}
+				else // left
+				{
+					walkingDir = 3;
+					graphic.transform.localScale = new Vector3(-graphic.transform.localScale.y, graphic.transform.localScale.y, graphic.transform.localScale.z);
+				}
+			}
+			else
+			{
+				if(walkingV.z > 0) // up
+				{
+					walkingDir = 0;
+				}
+				else // down
+				{
+					walkingDir = 1;
+				}
+			}
 		}
-		else if(Mathf.Abs(direction.x) > Mathf.Abs(direction.z))
+		else if(prevWalkingV != walkingV)
 		{
-			if(direction.x > 0) // right
-			{
-				walkingDir = 2;
-				graphic.transform.localScale = new Vector3(graphic.transform.localScale.y, graphic.transform.localScale.y, graphic.transform.localScale.z);
-			}
-			else // left
-			{
-				walkingDir = 3;
-				graphic.transform.localScale = new Vector3(-graphic.transform.localScale.y, graphic.transform.localScale.y, graphic.transform.localScale.z);
-			}
-		}
-		else
-		{
-			if(direction.z > 0) // up
-			{
-				walkingDir = 0;
-			}
-			else // down
-			{
-				walkingDir = 1;
-			}
+			walkingDir = Random.Range(0, 4);
 		}
 
 		AnimWalk();

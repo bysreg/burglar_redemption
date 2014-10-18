@@ -16,7 +16,6 @@ public class GuardAI : MonoBehaviour {
 	float patrolTimer;
 
 	GameObject player;
-	PlayerHealth playerHealth;
 	LastPlayerSighting lastPlayerSighting;
 
 	void Awake()
@@ -25,14 +24,13 @@ public class GuardAI : MonoBehaviour {
 		nav.updateRotation = false;
 		guardSight = GetComponent<GuardSight>();
 		player = GameObject.FindGameObjectWithTag("Player");
-		playerHealth = player.GetComponent<PlayerHealth>();
 		GameObject gameController = GameObject.FindGameObjectWithTag("GameController");
 		lastPlayerSighting = gameController.GetComponent<LastPlayerSighting>();
 	}
 
 	void Update()
 	{
-		if(/*playerHealth.health > 0 &&*/ guardSight.personalLastSighting != lastPlayerSighting.resetPosition)
+		if(guardSight.personalLastSighting != lastPlayerSighting.resetPosition)
 		{
 			Chasing ();
 		}
