@@ -48,7 +48,7 @@ public class GuardAI : MonoBehaviour {
 
 		if(nav.remainingDistance <= nav.stoppingDistance)
 		{
-			print (patrolTimer);
+			//print (patrolTimer);
 			patrolTimer += Time.deltaTime;
 
 			if(patrolTimer >= patrolWaitTime)
@@ -77,7 +77,14 @@ public class GuardAI : MonoBehaviour {
 
 		if(nav.remainingDistance < nav.stoppingDistance)
 		{
-			// do something
+			chaseTimer += Time.deltaTime;
+
+			if(chaseTimer >= chaseWaitTime)
+			{
+				chaseTimer -= chaseWaitTime;
+
+				guardSight.personalLastSighting = lastPlayerSighting.resetPosition;
+			}
 		}
 	}
 
