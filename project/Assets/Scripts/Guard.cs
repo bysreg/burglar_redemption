@@ -122,10 +122,10 @@ public class Guard : MonoBehaviour {
 				}
 			}
 		}
-		else if(prevWalkingV != walkingV)
-		{
-			walkingDir = Random.Range(0, 4);
-		}
+//		else if(prevWalkingV != walkingV)
+//		{
+//			walkingDir = Random.Range(0, 4);
+//		}
 
 		AnimWalk();
 	}

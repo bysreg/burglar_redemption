@@ -49,6 +49,10 @@ public class GuardSight : MonoBehaviour {
 			break;
 		}
 
+		if(lastPlayerSighting.position != lastPlayerSighting.resetPosition)
+		{
+			personalLastSighting = lastPlayerSighting.position;
+		}
 	}
 
 	void OnTriggerStay(Collider other)
