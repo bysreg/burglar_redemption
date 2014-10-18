@@ -93,6 +93,7 @@ public class GuardAI : MonoBehaviour {
 				chaseTimer -= chaseWaitTime;
 
 				guardSight.personalLastSighting = lastPlayerSighting.resetPosition;
+				lastPlayerSighting.position = lastPlayerSighting.resetPosition;
 			}
 		}
 	}
