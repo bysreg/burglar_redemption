@@ -9,6 +9,8 @@ public class ExitZoneDetection : MonoBehaviour {
 		{
 			//player reaches the goal
 			print ("goal reached");
+			//now sound the alarm
+
 		}
 	}
 

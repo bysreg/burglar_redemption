@@ -22,6 +22,8 @@ public class Player : MonoBehaviour {
 	Texture2D[] walkTextures;
 	GameObject graphic;
 
+	AudioSource footstepsSound;
+
 	void Awake()
 	{
 		GameObject gameController = GameObject.FindGameObjectWithTag("GameController");
@@ -32,6 +34,8 @@ public class Player : MonoBehaviour {
 		walkingDir = -1;
 		walkTextures = walkHorTextures;
 		frameTime = walkHorFrameTime;
+
+		footstepsSound = gameController.transform.Find("FootstepsSound").GetComponent<AudioSource>();
 	}
 
 	void AnimWalk()
@@ -66,6 +70,12 @@ public class Player : MonoBehaviour {
 		
 		if(walkingDir != -1)
 		{
+			//play footsteps sound
+			if(!footstepsSound.isPlaying)
+			{
+				footstepsSound.Play();
+			}
+
 			animTime += Time.fixedDeltaTime;
 			if(animTime >= frameTime)
 			{
@@ -73,6 +83,14 @@ public class Player : MonoBehaviour {
 				frameIndex = (frameIndex + 1) % walkTextures.Length;
 				
 				playerMat.mainTexture = walkTextures[frameIndex];
+			}
+		}
+		else
+		{
+			//stop footsteps sound
+			if(footstepsSound.isPlaying)
+			{
+				footstepsSound.Stop();
 			}
 		}
 	}
