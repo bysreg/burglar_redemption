@@ -85,15 +85,13 @@ public class PSMoveExample : MonoBehaviour {
 				PSMoveInput.Connect(ipAddress, int.Parse(port));
 			}
 
-
-			if(GUI.Button (new Rect(100, 40, 100, 35), "Start"))
-			{
-				
-			}
 		}
 		else {
 
-
+			if(GUI.Button (new Rect(420, 40, 100, 35), "Start"))
+			{
+				Application.LoadLevel("hilman");	
+			}
 			
 			if(GUI.Button(new Rect(20, 40, 100, 35), "Disconnect"))  {
 				PSMoveInput.Disconnect();

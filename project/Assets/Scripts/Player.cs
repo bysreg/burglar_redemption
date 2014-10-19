@@ -125,6 +125,37 @@ public class Player : MonoBehaviour {
 				MoveLeft(ref direction);
 			}
 		}
+		else
+		{
+			if((PSMoveInput.MoveControllers[0].Connected))
+			{
+				Vector3 gemPos, handlePos;
+				MoveData moveData = PSMoveInput.MoveControllers[0].Data;
+				gemPos = moveData.Position;
+				handlePos = moveData.HandlePosition;
+				
+				Vector3 psmoveDir = gemPos - handlePos;
+				print (direction);
+
+				if(direction.x > 0)
+				{
+					MoveRight(ref direction);
+				}
+				else
+				{
+					MoveLeft(ref direction);
+				}
+
+				if(direction.y > 0)
+				{
+					MoveUp(ref direction);
+				}
+				else
+				{
+					MoveDown(ref direction);
+				}
+			}
+		}
 
 		if(walkingDir != -1)
 		{
