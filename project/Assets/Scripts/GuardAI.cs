@@ -3,6 +3,7 @@ using System.Collections;
 
 public class GuardAI : MonoBehaviour {
 
+	public bool patrol = true;
 	public float patrolSpeed = 1.5f;
 	public float chaseSpeed = 4f;
 	public float chaseWaitTime = 5f;
@@ -49,6 +50,9 @@ public class GuardAI : MonoBehaviour {
 
 	void Patrolling()
 	{
+		if(!patrol)
+			return;
+
 		guardState = patrolling;
 		nav.speed = patrolSpeed;
 

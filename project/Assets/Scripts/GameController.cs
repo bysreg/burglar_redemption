@@ -5,11 +5,29 @@ public class GameController : MonoBehaviour {
 
 	public bool simulateWithKeyboard;
 
-	private bool isGameOver;
+	bool isGameOver;
+	bool initialized;
+	SceneFader sceneFader;
+
+	void Awake()
+	{
+		sceneFader = GameObject.Find("SceneFader").GetComponent<SceneFader>();
+	}
 
 	public void GameOver()
 	{
 		//fade the screen to black
 		isGameOver = false;
+		sceneFader.FadeInScene();
+	}
+	
+	void Update()
+	{
+		if(!initialized)
+		{
+			sceneFader.FadeOutScene();
+
+			initialized = true;
+		}
 	}
 }

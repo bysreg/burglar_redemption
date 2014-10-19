@@ -2,7 +2,8 @@
 using System.Collections;
 
 public class Guard : MonoBehaviour {
-	
+
+	public int initialWalkDir = -1;
 	public Texture2D standTexture;
 	public Texture2D[] walkHorTextures;
 	public float walkHorFrameTime;
@@ -30,11 +31,16 @@ public class Guard : MonoBehaviour {
 		graphic = transform.Find("Graphic").gameObject;
 		guardMat = graphic.GetComponent<MeshRenderer>().material;
 		prevWalkingDir = -1;
-		walkingDir = -1;
-		walkTextures = walkHorTextures;
+		walkingDir = initialWalkDir;
+
 		nav = GetComponent<NavMeshAgent>();
 		player = GameObject.FindGameObjectWithTag("Player");
 		gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
+	}
+
+	void Start()
+	{
+		AnimWalk();
 	}
 
 	void AnimWalk()
@@ -43,23 +49,33 @@ public class Guard : MonoBehaviour {
 		{
 			animTime = 0;
 			frameIndex = 0;
-			if(walkingDir == 2 || walkingDir == 3)
+			if(walkingDir == 2)
 			{
 				frameTime = walkHorFrameTime;
 				walkTextures = walkHorTextures;
 				guardMat.mainTexture = walkHorTextures[0];
+				graphic.transform.localScale = new Vector3(graphic.transform.localScale.y, graphic.transform.localScale.y, graphic.transform.localScale.z);
+			}
+			else if(walkingDir == 3)
+			{
+				frameTime = walkHorFrameTime;
+				walkTextures = walkHorTextures;
+				guardMat.mainTexture = walkHorTextures[0];
+				graphic.transform.localScale = new Vector3(-graphic.transform.localScale.y, graphic.transform.localScale.y, graphic.transform.localScale.z);
 			}
 			else if(walkingDir == 0)
 			{
 				frameTime = walkUpFrameTime;
 				walkTextures = walkUpTextures;
 				guardMat.mainTexture = walkUpTextures[0];
+				graphic.transform.localScale = new Vector3(graphic.transform.localScale.y, graphic.transform.localScale.y, graphic.transform.localScale.z);
 			}
 			else if(walkingDir == 1)
 			{
 				frameTime = walkDownFrameTime;
 				walkTextures = walkDownTextures;
 				guardMat.mainTexture = walkDownTextures[0];
+				graphic.transform.localScale = new Vector3(graphic.transform.localScale.y, graphic.transform.localScale.y, graphic.transform.localScale.z);
 			}
 			else if(walkingDir == -1)
 			{
@@ -102,12 +118,10 @@ public class Guard : MonoBehaviour {
 				if(walkingV.x > 0) // right
 				{
 					walkingDir = 2;
-					graphic.transform.localScale = new Vector3(graphic.transform.localScale.y, graphic.transform.localScale.y, graphic.transform.localScale.z);
 				}
 				else // left
 				{
 					walkingDir = 3;
-					graphic.transform.localScale = new Vector3(-graphic.transform.localScale.y, graphic.transform.localScale.y, graphic.transform.localScale.z);
 				}
 			}
 			else
@@ -122,10 +136,6 @@ public class Guard : MonoBehaviour {
 				}
 			}
 		}
-//		else if(prevWalkingV != walkingV)
-//		{
-//			walkingDir = Random.Range(0, 4);
-//		}
 
 		AnimWalk();
 	}

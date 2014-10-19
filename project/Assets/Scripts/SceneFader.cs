@@ -3,8 +3,11 @@ using System.Collections;
 
 public class SceneFader : MonoBehaviour {
 
-	public bool isFading;
-	public float targetAlpha;
+	public float fadeTime;
+
+	bool isFading;
+	float targetAlpha;
+	float vel;
 
 	void Awake()
 	{
@@ -16,7 +19,19 @@ public class SceneFader : MonoBehaviour {
 	{
 		if(isFading)
 		{
+			float alpha = guiTexture.color.a;
+			alpha = Mathf.SmoothDamp(alpha, targetAlpha, ref vel, fadeTime);
+			guiTexture.color = new Color(guiTexture.color.r, guiTexture.color.g, guiTexture.color.b, alpha);
 
+			if(Mathf.Abs(guiTexture.color.a - targetAlpha) <= 0.05f)
+			{
+				guiTexture.color = new Color(guiTexture.color.r, guiTexture.color.g, guiTexture.color.b, targetAlpha);
+				isFading = false;
+				if(targetAlpha == 0f)
+				{
+					guiTexture.enabled = false;
+				}
+			}
 		}
 	}
 
