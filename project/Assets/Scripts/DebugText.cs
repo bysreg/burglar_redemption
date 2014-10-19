@@ -19,7 +19,7 @@ public class DebugText : MonoBehaviour {
 		for(int i=0; i<guardCount; i++)
 		{
 			guardAIs[i] = guardParent.transform.GetChild(i).GetComponent<GuardAI>();
-		}
+		}///gggggggggg
 	}
 
 	void Update()
