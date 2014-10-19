@@ -1,194 +1,170 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Player : MonoBehaviour {
+public class Player : MonoBehaviour
+{
 	
-	public float speed;
-	public Texture2D standTexture;
-	public Texture2D[] walkHorTextures;
-	public float walkHorFrameTime;
-	public Texture2D[] walkUpTextures;
-	public float walkUpFrameTime;
-	public Texture2D[] walkDownTextures;
-	public float walkDownFrameTime;
+		public float speed;
+		public Texture2D standTexture;
+		public Texture2D[] walkHorTextures;
+		public float walkHorFrameTime;
+		public Texture2D[] walkUpTextures;
+		public float walkUpFrameTime;
+		public Texture2D[] walkDownTextures;
+		public float walkDownFrameTime;
 	
-	bool simulateWithKeyboard;
-	Material playerMat;
-	float animTime;
-	int walkingDir;
-	int prevWalkingDir;
-	int frameIndex;
-	float frameTime;
-	Texture2D[] walkTextures;
-	GameObject graphic;
+		bool simulateWithKeyboard;
+		Material playerMat;
+		float animTime;
+		int walkingDir;
+		int prevWalkingDir;
+		int frameIndex;
+		float frameTime;
+		Texture2D[] walkTextures;
+		GameObject graphic;
 
-	AudioSource footstepsSound;
+		AudioSource footstepsSound;
 
-	void Awake()
-	{
-		GameObject gameController = GameObject.FindGameObjectWithTag("GameController");
-		simulateWithKeyboard = gameController.GetComponent<GameController>().simulateWithKeyboard;
-		playerMat = GetComponentInChildren<MeshRenderer>().material;
-		graphic = transform.Find("Graphic").gameObject;
-		prevWalkingDir = -1;
-		walkingDir = -1;
-		walkTextures = walkHorTextures;
-		frameTime = walkHorFrameTime;
-
-		footstepsSound = gameController.transform.Find("FootstepsSound").GetComponent<AudioSource>();
-	}
-
-	void AnimWalk()
-	{
-		if(prevWalkingDir != walkingDir)
+		void Awake ()
 		{
-			animTime = 0;
-			frameIndex = 0;
-			if(walkingDir == 2 || walkingDir == 3)
-			{
-				frameTime = walkHorFrameTime;
+				GameObject gameController = GameObject.FindGameObjectWithTag ("GameController");
+				simulateWithKeyboard = gameController.GetComponent<GameController> ().simulateWithKeyboard;
+				playerMat = GetComponentInChildren<MeshRenderer> ().material;
+				graphic = transform.Find ("Graphic").gameObject;
+				prevWalkingDir = -1;
+				walkingDir = -1;
 				walkTextures = walkHorTextures;
-				playerMat.mainTexture = walkHorTextures[0];
-			}
-			else if(walkingDir == 0)
-			{
-				frameTime = walkUpFrameTime;
-				walkTextures = walkUpTextures;
-				playerMat.mainTexture = walkUpTextures[0];
-			}
-			else if(walkingDir == 1)
-			{
-				frameTime = walkDownFrameTime;
-				walkTextures = walkDownTextures;
-				playerMat.mainTexture = walkDownTextures[0];
-			}
-			else if(walkingDir == -1)
-			{
-				playerMat.mainTexture = standTexture;
-			}
+				frameTime = walkHorFrameTime;
+
+				footstepsSound = gameController.transform.Find ("FootstepsSound").GetComponent<AudioSource> ();
 		}
+
+		void AnimWalk ()
+		{
+				if (prevWalkingDir != walkingDir) {
+						animTime = 0;
+						frameIndex = 0;
+						if (walkingDir == 2 || walkingDir == 3) {
+								frameTime = walkHorFrameTime;
+								walkTextures = walkHorTextures;
+								playerMat.mainTexture = walkHorTextures [0];
+						} else if (walkingDir == 0) {
+								frameTime = walkUpFrameTime;
+								walkTextures = walkUpTextures;
+								playerMat.mainTexture = walkUpTextures [0];
+						} else if (walkingDir == 1) {
+								frameTime = walkDownFrameTime;
+								walkTextures = walkDownTextures;
+								playerMat.mainTexture = walkDownTextures [0];
+						} else if (walkingDir == -1) {
+								playerMat.mainTexture = standTexture;
+						}
+				}
 		
-		if(walkingDir != -1)
-		{
-			//play footsteps sound
-			if(!footstepsSound.isPlaying)
-			{
-				footstepsSound.Play();
-			}
+				if (walkingDir != -1) {
+						//play footsteps sound
+						if (!footstepsSound.isPlaying) {
+								footstepsSound.Play ();
+						}
 
-			animTime += Time.fixedDeltaTime;
-			if(animTime >= frameTime)
-			{
-				animTime -= frameTime;
-				frameIndex = (frameIndex + 1) % walkTextures.Length;
+						animTime += Time.fixedDeltaTime;
+						if (animTime >= frameTime) {
+								animTime -= frameTime;
+								frameIndex = (frameIndex + 1) % walkTextures.Length;
 				
-				playerMat.mainTexture = walkTextures[frameIndex];
-			}
+								playerMat.mainTexture = walkTextures [frameIndex];
+						}
+				} else {
+						//stop footsteps sound
+						if (footstepsSound.isPlaying) {
+								footstepsSound.Stop ();
+						}
+				}
 		}
-		else
-		{
-			//stop footsteps sound
-			if(footstepsSound.isPlaying)
-			{
-				footstepsSound.Stop();
-			}
-		}
-	}
 
-	void FixedUpdate()
-	{
-		prevWalkingDir = walkingDir;
-		walkingDir = -1;
-		Vector3 direction = Vector3.zero;
-
-		if(simulateWithKeyboard)
+		void FixedUpdate ()
 		{
-			//up
-			if(Input.GetKey(KeyCode.W))
-			{
-				MoveUp(ref direction);
-			}
+				prevWalkingDir = walkingDir;
+				walkingDir = -1;
+				Vector3 direction = Vector3.zero;
+
+//		if(simulateWithKeyboard)
+//		{
+				//up
+				if (Input.GetKey (KeyCode.W)) {
+						MoveUp (ref direction);
+				}
 			//down
-			else if(Input.GetKey(KeyCode.S))
-			{
-				MoveDown(ref direction);
-			}
+			else if (Input.GetKey (KeyCode.S)) {
+						MoveDown (ref direction);
+				}
 
-			//right
-			if(Input.GetKey(KeyCode.D))
-			{
-				MoveRight(ref direction);
-			}
+				//right
+				if (Input.GetKey (KeyCode.D)) {
+						MoveRight (ref direction);
+				}
 			//left
-			else if(Input.GetKey(KeyCode.A))
-			{
-				MoveLeft(ref direction);
-			}
-		}
-		else
-		{
-			if((PSMoveInput.MoveControllers[0].Connected))
-			{
-				Vector3 gemPos, handlePos;
-				MoveData moveData = PSMoveInput.MoveControllers[0].Data;
-				gemPos = moveData.Position;
-				handlePos = moveData.HandlePosition;
+			else if (Input.GetKey (KeyCode.A)) {
+						MoveLeft (ref direction);
+				}
+//		}
+//		else
+//		{
+				print (PSMoveInput.MoveControllers [0].Connected + " " + PSMoveInput.MoveControllers [1].Connected);
+				if ((PSMoveInput.MoveControllers [0].Connected)) {
+						Vector3 gemPos, handlePos;
+						MoveData moveData = PSMoveInput.MoveControllers [0].Data;
+						gemPos = moveData.Position;
+						handlePos = moveData.HandlePosition;
 				
-				Vector3 psmoveDir = gemPos - handlePos;
-				print (direction);
+						Vector3 psmoveDir = gemPos - handlePos;
+						print (psmoveDir + " " + gemPos + " " + handlePos);
 
-				if(direction.x > 0)
-				{
-					MoveRight(ref direction);
+						if (psmoveDir.x > 0) {
+								MoveRight (ref direction);
+						} else {
+								MoveLeft (ref direction);
+						}
+
+						if (psmoveDir.y > 0) {
+								MoveUp (ref direction);
+						} else {
+								MoveDown (ref direction);
+						}
 				}
-				else
-				{
-					MoveLeft(ref direction);
+//		}
+
+				if (walkingDir != -1) {
+						rigidbody.MovePosition (transform.position + direction.normalized * speed * Time.fixedDeltaTime);
 				}
 
-				if(direction.y > 0)
-				{
-					MoveUp(ref direction);
-				}
-				else
-				{
-					MoveDown(ref direction);
-				}
-			}
+				AnimWalk ();
 		}
 
-		if(walkingDir != -1)
+		void MoveUp (ref Vector3 direction)
 		{
-			rigidbody.MovePosition(transform.position + direction.normalized * speed * Time.fixedDeltaTime);
+				direction.z = 1;
+				walkingDir = 0;
 		}
 
-		AnimWalk();
-	}
+		void MoveDown (ref Vector3 direction)
+		{
+				direction.z = -1;
+				walkingDir = 1;
+		}
 
-	void MoveUp(ref Vector3 direction)
-	{
-		direction.z = 1;
-		walkingDir = 0;
-	}
+		void MoveRight (ref Vector3 direction)
+		{
+				direction.x = 1;
+				walkingDir = 2;
+				graphic.transform.localScale = new Vector3 (1, 1, 1);
+		}
 
-	void MoveDown(ref Vector3 direction)
-	{
-		direction.z = -1;
-		walkingDir = 1;
-	}
-
-	void MoveRight(ref Vector3 direction)
-	{
-		direction.x = 1;
-		walkingDir = 2;
-		graphic.transform.localScale = new Vector3(1, 1, 1);
-	}
-
-	void MoveLeft(ref Vector3 direction)
-	{
-		direction.x = -1;
-		walkingDir = 3;
-		graphic.transform.localScale = new Vector3(-1, 1, 1);
-	}
+		void MoveLeft (ref Vector3 direction)
+		{
+				direction.x = -1;
+				walkingDir = 3;
+				graphic.transform.localScale = new Vector3 (-1, 1, 1);
+		}
 	
 }
