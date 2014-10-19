@@ -14,6 +14,7 @@ public class Player : MonoBehaviour
 		public float walkDownFrameTime;
 	
 		bool simulateWithKeyboard;
+		GameController gameController;
 		Material playerMat;
 		float animTime;
 		int walkingDir;
@@ -28,7 +29,7 @@ public class Player : MonoBehaviour
 		void Awake ()
 		{
 				GameObject gameController = GameObject.FindGameObjectWithTag ("GameController");
-				simulateWithKeyboard = gameController.GetComponent<GameController> ().simulateWithKeyboard;
+				this.gameController = gameController.GetComponent<GameController> ();
 				playerMat = GetComponentInChildren<MeshRenderer> ().material;
 				graphic = transform.Find ("Graphic").gameObject;
 				prevWalkingDir = -1;
@@ -88,55 +89,63 @@ public class Player : MonoBehaviour
 				walkingDir = -1;
 				Vector3 direction = Vector3.zero;
 
-//		if(simulateWithKeyboard)
-//		{
-				//up
-				if (Input.GetKey (KeyCode.W)) {
-						MoveUp (ref direction);
-				}
-			//down
-			else if (Input.GetKey (KeyCode.S)) {
-						MoveDown (ref direction);
-				}
+				if (gameController.simulateWithKeyboard) {
+						//up
+						if (Input.GetKey (KeyCode.W)) {
+								MoveUp (ref direction);
+						}
+						//down
+						else if (Input.GetKey (KeyCode.S)) {
+								MoveDown (ref direction);
+						}
 
-				//right
-				if (Input.GetKey (KeyCode.D)) {
-						MoveRight (ref direction);
-				}
-			//left
-			else if (Input.GetKey (KeyCode.A)) {
-						MoveLeft (ref direction);
-				}
-//		}
-//		else
-//		{
-				print (PSMoveInput.MoveControllers [0].Connected + " " + PSMoveInput.MoveControllers [1].Connected);
-				if ((PSMoveInput.MoveControllers [0].Connected)) {
-						Vector3 gemPos, handlePos;
-						MoveData moveData = PSMoveInput.MoveControllers [0].Data;
-						gemPos = moveData.Position;
-						handlePos = moveData.HandlePosition;
-				
-						Vector3 psmoveDir = gemPos - handlePos;
-						print (psmoveDir + " " + gemPos + " " + handlePos);
-
-						if (psmoveDir.x > 0) {
+						//right
+						if (Input.GetKey (KeyCode.D)) {
 								MoveRight (ref direction);
-						} else {
+						}
+						//left
+						else if (Input.GetKey (KeyCode.A)) {
 								MoveLeft (ref direction);
 						}
 
-						if (psmoveDir.y > 0) {
-								MoveUp (ref direction);
-						} else {
-								MoveDown (ref direction);
+						if (walkingDir != -1) {
+								rigidbody.MovePosition (transform.position + direction.normalized * speed * Time.fixedDeltaTime);
+						}
+				} else {
+						print (PSMoveInput.MoveControllers [0].Connected + " " + PSMoveInput.MoveControllers [1].Connected);
+						if ((PSMoveInput.MoveControllers [0].Connected)) {
+								Vector3 gemPos, handlePos;
+								MoveData moveData = PSMoveInput.MoveControllers [0].Data;
+								gemPos = moveData.Position;
+								handlePos = moveData.HandlePosition;
+				
+								Vector3 psmoveDir = gemPos - handlePos;
+								print (psmoveDir.x + " " + psmoveDir.y);
+
+								float delta = 0.2f;
+
+								if (psmoveDir.y >= delta) {
+										MoveUp (ref direction);
+								} else if (psmoveDir.y <= -delta) {
+										MoveDown (ref direction);
+								}
+
+								if (psmoveDir.x >= delta) {
+										MoveRight (ref direction);
+								} else if (psmoveDir.x <= -delta) {
+										MoveLeft (ref direction);
+								}
+								
+								psmoveDir.z = psmoveDir.y;
+								psmoveDir.y = 0f;
+
+								if (walkingDir != -1) {
+										rigidbody.MovePosition (transform.position + psmoveDir.normalized * speed * Time.fixedDeltaTime);
+								}		
 						}
 				}
-//		}
 
-				if (walkingDir != -1) {
-						rigidbody.MovePosition (transform.position + direction.normalized * speed * Time.fixedDeltaTime);
-				}
+				
 
 				AnimWalk ();
 		}
