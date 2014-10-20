@@ -7,6 +7,7 @@ public class DebugText : MonoBehaviour {
 	GUIText lastSightingText;
 	int guardCount;
 	GuardAI[] guardAIs;
+	Player player;
 
 	void Awake()
 	{
@@ -15,6 +16,7 @@ public class DebugText : MonoBehaviour {
 		guardCount = GameObject.Find("Guards").transform.childCount;
 		GameObject guardParent = GameObject.Find("Guards");
 		guardAIs = new GuardAI[guardCount];
+		player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
 
 		for(int i=0; i<guardCount; i++)
 		{
@@ -33,7 +35,7 @@ public class DebugText : MonoBehaviour {
 		{
 			GuardAI guard = guardAIs[i];
 
-			GUI.Label(new Rect(20, i * 45 + 45, 100, 35), "Guard " + i + " : " + guard.GetGuardState());
+			GUI.Label(new Rect(20, i * 45 + 45, 200, 35), "Guard " + i + " : " + guard.GetGuardState() + " " + (player.transform.position - guard.transform.position).sqrMagnitude);
 		}
 	}
 }

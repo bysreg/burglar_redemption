@@ -2,13 +2,17 @@
 using System.Collections;
 
 public class GuardAI : MonoBehaviour {
-
-	public bool patrol = true;
+	
 	public float patrolSpeed = 1.5f;
 	public float chaseSpeed = 4f;
 	public float chaseWaitTime = 5f;
 	public float patrolWaitTime = 10f;
 	public Transform[] patrolWayPoints;
+	public bool stopAfterFinishingPatrol = false;
+
+	public static bool guardActive = false;
+
+	bool patrol = true; // does this guard able to patrol ?
 
 	NavMeshAgent nav;
 	GuardSight guardSight;
@@ -24,7 +28,9 @@ public class GuardAI : MonoBehaviour {
 	string chasing = "chasing";
 	string waitingAfterChase = "waiting after chase";
 	string waitingAfterPatrol = "waiting after patrol";
+	string successCatchPlayer = "success catch player";
 	string guardState;
+	bool isSuccessCatchPlayer;
 
 	void Awake()
 	{
@@ -38,7 +44,11 @@ public class GuardAI : MonoBehaviour {
 
 	void Update()
 	{
-		if(guardSight.personalLastSighting != lastPlayerSighting.resetPosition)
+		if(isSuccessCatchPlayer)
+		{
+			nav.Stop ();
+		}
+		else if(guardSight.personalLastSighting != lastPlayerSighting.resetPosition)
 		{
 			Chasing ();
 		}
@@ -50,7 +60,7 @@ public class GuardAI : MonoBehaviour {
 
 	void Patrolling()
 	{
-		if(!patrol)
+		if(!patrol || !guardActive)
 			return;
 
 		guardState = patrolling;
@@ -64,6 +74,13 @@ public class GuardAI : MonoBehaviour {
 
 			if(patrolTimer >= patrolWaitTime)
 			{
+				if(stopAfterFinishingPatrol && wayPointIndex + 1 == patrolWayPoints.Length)
+				{
+					patrol = false;
+					nav.Stop();
+					return;
+				}
+
 				wayPointIndex = (wayPointIndex + 1) % patrolWayPoints.Length;
 
 				patrolTimer -= patrolWaitTime;
@@ -105,6 +122,12 @@ public class GuardAI : MonoBehaviour {
 	public string GetGuardState()
 	{
 		return guardState;
+	}
+
+	public void CatchPlayer()
+	{
+		isSuccessCatchPlayer = true;
+		guardState = successCatchPlayer;
 	}
 
 }
