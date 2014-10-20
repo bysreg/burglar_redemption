@@ -97,7 +97,7 @@ public class GuardAI : MonoBehaviour {
 		guardState = chasing;
 		Vector3 sightingDir = guardSight.personalLastSighting - transform.position;
 
-		if(sightingDir.sqrMagnitude > 4f)
+		if(sightingDir.sqrMagnitude > 1.3f)
 		{
 			nav.destination = guardSight.personalLastSighting;
 		}

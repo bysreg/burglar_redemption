@@ -229,6 +229,7 @@ public class Player : MonoBehaviour
 		{
 			//stop that guard from moving close in order to avoid collision
 			other.GetComponent<GuardAI>().CatchPlayer();
+			gameController.GameOver();
 		}
 	}
 }
