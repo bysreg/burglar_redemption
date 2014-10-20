@@ -26,6 +26,8 @@ public class Guard : MonoBehaviour {
 	GameController gameController;
 	GameObject player;
 
+	AudioSource footstepsSound;
+
 	void Awake()
 	{
 		graphic = transform.Find("Graphic").gameObject;
@@ -36,6 +38,8 @@ public class Guard : MonoBehaviour {
 		nav = GetComponent<NavMeshAgent>();
 		player = GameObject.FindGameObjectWithTag("Player");
 		gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
+
+		footstepsSound = GetComponent<AudioSource>();
 	}
 
 	void Start()
@@ -85,6 +89,12 @@ public class Guard : MonoBehaviour {
 		
 		if(nav.velocity != Vector3.zero)
 		{
+			//play footsteps sound
+			if(!footstepsSound.isPlaying)
+			{
+				footstepsSound.Play();
+			}
+
 			animTime += Time.fixedDeltaTime;
 			if(animTime >= frameTime)
 			{
@@ -92,6 +102,14 @@ public class Guard : MonoBehaviour {
 				frameIndex = (frameIndex + 1) % walkTextures.Length;
 				
 				guardMat.mainTexture = walkTextures[frameIndex];
+			}
+		}
+		else
+		{
+			//stop footsteps sound
+			if(footstepsSound.isPlaying)
+			{
+				footstepsSound.Stop();
 			}
 		}
 	}
