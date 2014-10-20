@@ -28,7 +28,7 @@ public class LockDial : MonoBehaviour {
 
 	public int AngleToNumber()
 	{
-		int number = Mathf .FloorToInt(Rotation / 7.2f);
+		int number = Mathf .FloorToInt(Rotation / 3.6f);
 		return number;
 	}
 

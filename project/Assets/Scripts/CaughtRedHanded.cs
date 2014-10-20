@@ -19,6 +19,7 @@ public class CaughtRedHanded : MonoBehaviour {
 		if(Saw.isSawing)
 		{
 			print ("Caught");
+			Application.LoadLevel(Application.loadedLevel);
 		}
 	}
 

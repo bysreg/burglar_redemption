@@ -11,6 +11,8 @@ public class Saw : MonoBehaviour
 	public float Phase;
 	private Vector2 root;
 	public static bool isSawing;
+	public float BarHealth;
+	public float DamageRate;
 
 	// Use this for initialization
 	void Start () 
@@ -19,6 +21,8 @@ public class Saw : MonoBehaviour
 		theta = 0f;
 		root = transform.position;
 		isSawing = false;
+		BarHealth = 100.0f;
+		DamageRate = 10.0f;
 
 		if((gameObject.tag=="Kneel")||(gameObject.tag=="Saw"))
 		{
@@ -29,12 +33,18 @@ public class Saw : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
 	{
+		if(BarHealth <0)
+		{
+			Application.LoadLevel (Application.loadedLevel +1);
+		}
+
 		if(Input.GetKeyDown (KeyCode.Space))
 		{
 			if(gameObject.tag=="Saw")
 			{
 				Image.enabled=true;
 				isSawing = true;
+
 			}
 
 			if(gameObject.tag=="Sit")
@@ -55,6 +65,7 @@ public class Saw : MonoBehaviour
 			if(gameObject.tag=="Saw")
 			{
 				Move();
+				BarHealth -= DamageRate * Time.deltaTime ;
 			}
 		}
 
