@@ -11,6 +11,7 @@ public class PlayMovie : MonoBehaviour {
 	{
 		movie = renderer.material.mainTexture as MovieTexture;
 		movie.Play();
+		audio.Play();
 	}
 
 	void Update()

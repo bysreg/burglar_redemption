@@ -93,7 +93,7 @@ public class PSMoveExample : MonoBehaviour
 				} else {
 
 						if (GUI.Button (new Rect (420, 40, 100, 35), "Start")) {
-								Application.LoadLevel ("hilman");	
+								Application.LoadLevel ("beginning");	
 						}
 			
 						if (GUI.Button (new Rect (20, 40, 100, 35), "Disconnect")) {

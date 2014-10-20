@@ -4,6 +4,7 @@ using System.Collections;
 public class SceneFader : MonoBehaviour {
 
 	public float fadeTime;
+	public Object nextScene;
 
 	bool isFading;
 	float targetAlpha;
@@ -40,6 +41,10 @@ public class SceneFader : MonoBehaviour {
 		guiTexture.enabled = true;
 		isFading = true;
 		targetAlpha = 1f;
+
+		if(nextScene != null){
+			Application.LoadLevel(nextScene.name);
+		}
 	}
 
 	public void FadeOutScene()

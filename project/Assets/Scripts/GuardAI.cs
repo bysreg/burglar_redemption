@@ -34,6 +34,7 @@ public class GuardAI : MonoBehaviour {
 
 	void Awake()
 	{
+		//guardActive = true; // fixme
 		nav = GetComponent<NavMeshAgent>();
 		nav.updateRotation = false;
 		guardSight = GetComponent<GuardSight>();
