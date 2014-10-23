@@ -3,8 +3,6 @@ using System.Collections;
 
 public class PlayMovie : MonoBehaviour {
 
-	public Object nextScene;
-
 	MovieTexture movie;
 
 	void Start()
@@ -16,10 +14,9 @@ public class PlayMovie : MonoBehaviour {
 
 	void Update()
 	{
-		if(!movie.isPlaying)
+		if (!movie.isPlaying)
 		{
-			if(nextScene != null)
-				Application.LoadLevel(nextScene.name);
+			Application.LoadLevel (Application.loadedLevel +1);
 		}
 	}
 
