@@ -6,6 +6,8 @@ public class PhidgetController : MonoBehaviour {
 
 	InterfaceKit ifk;
 
+	public static int LockSensor;
+
 	void Start()
 	{
 		ifk = new InterfaceKit();
@@ -17,8 +19,8 @@ public class PhidgetController : MonoBehaviour {
 	{
 
 		int sensor1 = ifk.sensors[0].Value;
-		int sensor2 = ifk.sensors[6].Value;
+		LockSensor = ifk.sensors[6].Value;
 
-		print (sensor1 + " " + sensor2);
+		//print (sensor1 + " " + sensor2);
 	}
 }
