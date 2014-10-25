@@ -14,6 +14,13 @@ public class Saw : MonoBehaviour
 	public float BarHealth;
 	public float DamageRate;
 
+	ParticleSystem sparkPS;
+
+	void Awake()
+	{
+		sparkPS = GameObject.Find("Spark").GetComponent<ParticleSystem>();
+	}
+
 	// Use this for initialization
 	void Start () 
 	{
@@ -28,6 +35,9 @@ public class Saw : MonoBehaviour
 		{
 			Image.enabled = false;
 		}
+
+
+		sparkPS.enableEmission = false;
 	}
 	
 	// Update is called once per frame
@@ -58,6 +68,8 @@ public class Saw : MonoBehaviour
 				theta=Phase*Mathf.Deg2Rad;
 				audio.Play();
 			}
+
+			sparkPS.enableEmission = true;
 		}
 
 		if(Input.GetKey (KeyCode.Space))
@@ -87,6 +99,8 @@ public class Saw : MonoBehaviour
 				Image.enabled=false;
 				audio.Stop();
 			}
+
+			sparkPS.enableEmission = false;
 		}
 	
 	}
