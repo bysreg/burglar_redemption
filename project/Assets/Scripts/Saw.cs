@@ -15,13 +15,20 @@ public class Saw : MonoBehaviour
 	public float DamageRate;
 
 	ParticleSystem sparkPS;
+	GameObject saw;
+	GameObject sit;
+	GameObject kneel;
+	AudioSource sawAudio;
 
 	void Awake()
 	{
 		sparkPS = GameObject.Find("Spark").GetComponent<ParticleSystem>();
+		saw = GameObject.FindGameObjectWithTag("Saw");
+		sit = GameObject.FindGameObjectWithTag("Sit");
+		kneel = GameObject.FindGameObjectWithTag("Kneel");
+		sawAudio = saw.GetComponent<AudioSource>();
 	}
-
-	// Use this for initialization
+	
 	void Start () 
 	{
 		Image = gameObject.GetComponent <SpriteRenderer> ();
@@ -30,17 +37,12 @@ public class Saw : MonoBehaviour
 		isSawing = false;
 		BarHealth = 100.0f;
 		DamageRate = 10.0f;
-
-		if((gameObject.tag=="Kneel")||(gameObject.tag=="Saw"))
-		{
-			Image.enabled = false;
-		}
-
+		kneel.GetComponent<SpriteRenderer>().enabled = false;
+		saw.GetComponent<SpriteRenderer>().enabled = false;
 
 		sparkPS.enableEmission = false;
 	}
-	
-	// Update is called once per frame
+
 	void Update () 
 	{
 		if(BarHealth <0)
@@ -50,55 +52,30 @@ public class Saw : MonoBehaviour
 
 		if(Input.GetKeyDown (KeyCode.Space))
 		{
-			if(gameObject.tag=="Saw")
-			{
-				Image.enabled=true;
-				isSawing = true;
+			isSawing = true;
 
-			}
-
-			if(gameObject.tag=="Sit")
-			{
-				Image.enabled=false;
-			}
-
-			if(gameObject.tag=="Kneel")
-			{
-				Image.enabled=true;
-				theta=Phase*Mathf.Deg2Rad;
-				audio.Play();
-			}
+			saw.GetComponent<SpriteRenderer>().enabled = true;
+			sit.GetComponent<SpriteRenderer>().enabled = false;
+			kneel.GetComponent<SpriteRenderer>().enabled = true;
+			theta = Phase*Mathf.Deg2Rad;
+			sawAudio.Play();
 
 			sparkPS.enableEmission = true;
 		}
 
 		if(Input.GetKey (KeyCode.Space))
 		{
-			if(gameObject.tag=="Saw")
-			{
-				Move();
-				BarHealth -= DamageRate * Time.deltaTime ;
-			}
+			Move();
+			BarHealth -= DamageRate * Time.deltaTime ;
 		}
 
 		if(Input.GetKeyUp (KeyCode.Space))
 		{
-			if(gameObject.tag=="Saw")
-			{
-				Image.enabled=false;
-				isSawing = false;
-			}
-
-			if(gameObject.tag=="Sit")
-			{
-				Image.enabled=true;
-			}
-
-			if(gameObject.tag=="Kneel")
-			{
-				Image.enabled=false;
-				audio.Stop();
-			}
+			isSawing = false;
+			saw.GetComponent<SpriteRenderer>().enabled = false;
+			sit.GetComponent<SpriteRenderer>().enabled = true;
+			kneel.GetComponent<SpriteRenderer>().enabled = false;
+			sawAudio.Stop();
 
 			sparkPS.enableEmission = false;
 		}
@@ -108,6 +85,6 @@ public class Saw : MonoBehaviour
 	void Move()
 	{
 		theta += omega * Time.deltaTime;
-		rigidbody2D.MovePosition (root + new Vector2(A * Mathf.Sin (theta), B * Mathf.Sin (theta)));
+		saw.rigidbody2D.MovePosition (root + new Vector2(A * Mathf.Sin (theta), B * Mathf.Sin (theta)));
 	}
 }
