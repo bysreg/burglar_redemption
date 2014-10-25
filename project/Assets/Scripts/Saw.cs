@@ -19,6 +19,8 @@ public class Saw : MonoBehaviour
 	GameObject sit;
 	GameObject kneel;
 	AudioSource sawAudio;
+	bool initialized;
+	SceneFader sceneFader;
 
 	void Awake()
 	{
@@ -27,6 +29,7 @@ public class Saw : MonoBehaviour
 		sit = GameObject.FindGameObjectWithTag("Sit");
 		kneel = GameObject.FindGameObjectWithTag("Kneel");
 		sawAudio = saw.GetComponent<AudioSource>();
+		sceneFader = GameObject.Find ("SceneFader").GetComponent<SceneFader>();
 	}
 	
 	void Start () 
@@ -45,6 +48,12 @@ public class Saw : MonoBehaviour
 
 	void Update () 
 	{
+		if(!initialized)
+		{
+			sceneFader.FadeInScene();
+			initialized = true;
+		}
+
 		if(BarHealth <0)
 		{
 			Application.LoadLevel (Application.loadedLevel +1);

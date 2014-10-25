@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 
 public class SceneFader : MonoBehaviour {
 
 	public float fadeTime;
-	public Object nextScene;
 
 	bool isFading;
 	float targetAlpha;
@@ -40,18 +40,23 @@ public class SceneFader : MonoBehaviour {
 	{
 		guiTexture.enabled = true;
 		isFading = true;
-		targetAlpha = 1f;
-
-		if(nextScene != null){
-			Application.LoadLevel(nextScene.name);
-		}
+		targetAlpha = 0f;
 	}
 
-	public void FadeOutScene()
+	public void FadeOutScene(Action callback = null)
 	{
 		guiTexture.enabled = true;
 		isFading = true;
-		targetAlpha = 0f;
+		targetAlpha = 1f;
+
+		if(callback != null)
+		{
+			callback();
+		}
+		else
+		{
+			Application.LoadLevel(Application.loadedLevel + 1);
+		}
 	}
 
 }

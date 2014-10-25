@@ -18,14 +18,14 @@ public class GameController : MonoBehaviour {
 	{
 		//fade the screen to black
 		isGameOver = false;
-		sceneFader.FadeInScene();
+		sceneFader.FadeOutScene();
 	}
 	
 	void Update()
 	{
 		if(!initialized)
 		{
-			sceneFader.FadeOutScene();
+			sceneFader.FadeInScene();
 
 			initialized = true;
 		}
