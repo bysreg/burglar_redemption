@@ -1,0 +1,180 @@
+fileFormatVersion: 2
+guid: fac1761575e40fa4bbe821fc1ed7c678
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: Crosshairs_12
+    21300002: Crosshairs_12_0
+    21300004: Crosshairs_12_1
+    21300006: Crosshairs_12_2
+    21300008: Crosshairs_12_3
+    21300010: Crosshairs_12_4
+    21300012: Crosshairs_12_5
+    21300014: Crosshairs_12_6
+    21300016: Crosshairs_12_7
+    21300018: Crosshairs_12_8
+    21300020: Crosshairs_12_9
+    21300022: Crosshairs_12_10
+    21300024: Crosshairs_12_11
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 1024
+  textureSettings:
+    filterMode: -1
+    aniso: 1
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 80
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: Crosshairs_12_0
+      rect:
+        serializedVersion: 2
+        x: 29
+        y: 1974
+        width: 589
+        height: 602
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Crosshairs_12_1
+      rect:
+        serializedVersion: 2
+        x: 684
+        y: 1974
+        width: 589
+        height: 602
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Crosshairs_12_2
+      rect:
+        serializedVersion: 2
+        x: 1336
+        y: 1974
+        width: 589
+        height: 602
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Crosshairs_12_3
+      rect:
+        serializedVersion: 2
+        x: 29
+        y: 1317
+        width: 589
+        height: 602
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Crosshairs_12_4
+      rect:
+        serializedVersion: 2
+        x: 684
+        y: 1317
+        width: 589
+        height: 602
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Crosshairs_12_5
+      rect:
+        serializedVersion: 2
+        x: 1336
+        y: 1317
+        width: 589
+        height: 602
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Crosshairs_12_6
+      rect:
+        serializedVersion: 2
+        x: 29
+        y: 661
+        width: 589
+        height: 602
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Crosshairs_12_7
+      rect:
+        serializedVersion: 2
+        x: 684
+        y: 661
+        width: 589
+        height: 602
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Crosshairs_12_8
+      rect:
+        serializedVersion: 2
+        x: 1336
+        y: 661
+        width: 589
+        height: 602
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Crosshairs_12_9
+      rect:
+        serializedVersion: 2
+        x: 29
+        y: 0
+        width: 589
+        height: 585
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Crosshairs_12_10
+      rect:
+        serializedVersion: 2
+        x: 684
+        y: 0
+        width: 589
+        height: 585
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Crosshairs_12_11
+      rect:
+        serializedVersion: 2
+        x: 1336
+        y: 0
+        width: 589
+        height: 585
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: 
+  userData: 

@@ -17,7 +17,7 @@ public class Parenting : MonoBehaviour {
 
 	}
 
-	void OnTriggerStay (Collider other)
+	void OnTriggerStay2D (Collider2D other)
 	{
 		if(target == gameObject.tag )
 		{
@@ -27,5 +27,6 @@ public class Parenting : MonoBehaviour {
 				other.transform.parent = gameObject.transform ;
 			}
 		}
+
 	}
 }
