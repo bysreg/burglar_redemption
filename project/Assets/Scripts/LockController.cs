@@ -26,9 +26,13 @@ public class LockController : MonoBehaviour
 		RotationLock = false;
 		ButtonPressed = false;
 		Parenting.target = "None";
-		ifk = new InterfaceKit();
-		ifk.open ();
-		ifk.waitForAttachment(5000);
+		if(!Emulator)
+		{
+			ifk = new InterfaceKit();
+			ifk.open ();
+			ifk.waitForAttachment(5000);
+		}
+
 		Sensor = OldSensorValue = 500;
 
 		SelectedCog = GameObject.FindGameObjectWithTag("Dummy");

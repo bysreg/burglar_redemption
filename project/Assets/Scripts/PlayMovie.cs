@@ -18,6 +18,11 @@ public class PlayMovie : MonoBehaviour {
 		{
 			Application.LoadLevel (Application.loadedLevel +1);
 		}
+
+		if(Input.GetKeyDown(KeyCode.Space))
+		{
+			Application.LoadLevel(Application.loadedLevel + 1);
+		}
 	}
 
 }

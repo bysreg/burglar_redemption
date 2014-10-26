@@ -3,24 +3,37 @@ using System.Collections;
 
 public class CaughtRedHanded : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () 
-	{
+	bool isGameOver;
+	SceneFader sceneFader;
+	GameOver gameOver;
 
+	void Awake()
+	{
+		sceneFader = GameObject.Find("SceneFader").GetComponent<SceneFader>();
+		gameOver = GameObject.Find("GameOver").GetComponent<GameOver>();
 	}
 
 	void OnTriggerStay2D(Collider2D other)
 	{
 		if(Saw.isSawing)
 		{
-			print ("Caught");
-			Application.LoadLevel(Application.loadedLevel);
+			GameOver();
 		}
+	}
+
+	void GameOver()
+	{
+		gameOver.ShowGameOver();
+//		if(!isGameOver)
+//		{
+//			isGameOver = true;
+//			sceneFader.FadeOutScene(GameOverCallback);
+//		}
+	}
+
+	void GameOverCallback()
+	{
+		Application.LoadLevel(Application.loadedLevel);
 	}
 
 }
