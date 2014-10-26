@@ -18,7 +18,7 @@ public class LockController : MonoBehaviour
 
 	Vector3 Clockwise= new Vector3(0,0,-120);
 	Vector3 AntiClockwise= new Vector3(0,0,-120);
-	
+	float deltaRotationSensor = 2; // a delta value of rotation sensor to be considered there is a rotation
 
 	// Use this for initialization
 	void Start () 
@@ -32,11 +32,14 @@ public class LockController : MonoBehaviour
 			ifk.open ();
 			ifk.waitForAttachment(5000);
 		}
+		else
+		{
+			deltaRotationSensor = 1; // for mouse, 1 point difference is enough
+		}
 
 		Sensor = OldSensorValue = 500;
 
 		SelectedCog = GameObject.FindGameObjectWithTag("Dummy");
-
 	}
 	
 	// Update is called once per frame
@@ -52,8 +55,7 @@ public class LockController : MonoBehaviour
 		{
 			Sensor += Mathf.FloorToInt((Input.GetAxis ("Mouse ScrollWheel")*10));
 		}
-
-
+		
 		if(Input.GetKeyDown(KeyCode.W))
 		{
 			ButtonPressed = true;
@@ -89,36 +91,29 @@ public class LockController : MonoBehaviour
 			//Parenting.target = "Dummy";
 		}
 
-		if( (ButtonPressed ==true) && ( OldSensorValue != Sensor) )                                   //Edit here if you want to switch direction of rotation
+		if( (ButtonPressed ==true) && (  Mathf.Abs(OldSensorValue - Sensor) >= deltaRotationSensor) && RotationLock == false )                                   //Edit here if you want to switch direction of rotation
 		{
-			if(OldSensorValue < Sensor)
-			{
-				if(RotationLock ==false)
-				{
-					RotationLock = true;
-					CurrentAngle = SelectedCog.rigidbody2D.rotation ;
-					TargetAngle = CurrentAngle + 120f;
-					TargetAngle = Normalize (TargetAngle);
-					Omega = AngularSpeed ;
-				}
-			}
-
 			if(OldSensorValue > Sensor)
 			{
-				if(RotationLock ==false)
-				{
-					RotationLock = true;
-					CurrentAngle = SelectedCog.rigidbody2D.rotation ;
-					TargetAngle = CurrentAngle - 120f;
-					TargetAngle = Normalize (TargetAngle);
-					Omega = -AngularSpeed;
-				}
+				RotationLock = true;
+				CurrentAngle = SelectedCog.rigidbody2D.rotation ;
+				TargetAngle = CurrentAngle + 120f;
+				TargetAngle = Normalize (TargetAngle);
+				Omega = AngularSpeed ;
+
+			}
+			else if(OldSensorValue < Sensor)
+			{
+				RotationLock = true;
+				CurrentAngle = SelectedCog.rigidbody2D.rotation ;
+				TargetAngle = CurrentAngle - 120f;
+				TargetAngle = Normalize (TargetAngle);
+				Omega = -AngularSpeed;
 			}
 		}
 
 		SelectedCog = GameObject.FindGameObjectWithTag (Parenting.target);
 		StartCoroutine (RotateThing ());
-
 	}
 
 
