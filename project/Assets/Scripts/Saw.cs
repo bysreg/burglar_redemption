@@ -7,14 +7,14 @@ public class Saw : MonoBehaviour
 	public float omega;
 	public float A;
 	public float B;
-	private SpriteRenderer Image;
-	private float theta;
-	public float Phase;
-	private Vector2 root;
-	public static bool isSawing;
-	public float BarHealth;
-	public float DamageRate;
+	//public float Phase; //unused ?
 
+	bool isSawing;
+	bool isSitting;
+	float BarHealth;
+	float DamageRate;
+	float theta;
+	Vector2 root;
 	InterfaceKit ifk;
 	ParticleSystem sparkPS;
 	GameObject saw;
@@ -40,7 +40,6 @@ public class Saw : MonoBehaviour
 	
 	void Start () 
 	{
-		Image = gameObject.GetComponent <SpriteRenderer> ();
 		theta = 0f;
 		root = transform.position;
 		isSawing = false;
@@ -75,46 +74,58 @@ public class Saw : MonoBehaviour
 			return;
 		}
 
-		if (usePhidgets) 
+		if(!isSitting)
 		{
-			oldRotationSensorVal = rotationSensorVal;
-			rotationSensorVal = ifk.sensors[0].Value;
-
-			if(Mathf.Abs(rotationSensorVal - oldRotationSensorVal) >= deltaRotationSensor)
+			if (usePhidgets) 
 			{
-				if(!isSawing)
+				oldRotationSensorVal = rotationSensorVal;
+				rotationSensorVal = ifk.sensors[0].Value;
+
+				if(Mathf.Abs(rotationSensorVal - oldRotationSensorVal) >= deltaRotationSensor)
 				{
-					StartSawing();
+					if(!isSawing)
+					{
+						StartSawing();
+					}
+					else
+					{
+						ContinueSawing();
+					}
 				}
 				else
 				{
-					ContinueSawing();
+					if(isSawing)
+					{
+						StopSawing();
+					}
 				}
 			}
 			else
 			{
-				if(isSawing)
+				if(Input.GetKeyDown (KeyCode.Space))
+				{
+					StartSawing();
+				}
+				
+				if(Input.GetKey (KeyCode.Space))
+				{
+					ContinueSawing();
+				}
+				
+				if(Input.GetKeyUp (KeyCode.Space))
 				{
 					StopSawing();
 				}
 			}
 		}
+
+		if(Input.GetKey(KeyCode.DownArrow))
+		{
+			Sit();
+		}
 		else
 		{
-			if(Input.GetKeyDown (KeyCode.Space))
-			{
-				StartSawing();
-			}
-			
-			if(Input.GetKey (KeyCode.Space))
-			{
-				ContinueSawing();
-			}
-			
-			if(Input.GetKeyUp (KeyCode.Space))
-			{
-				StopSawing();
-			}
+			Kneel();
 		}
 
 		if(BarHealth <0)
@@ -136,7 +147,7 @@ public class Saw : MonoBehaviour
 		saw.GetComponent<SpriteRenderer>().enabled = true;
 		sit.GetComponent<SpriteRenderer>().enabled = false;
 		kneel.GetComponent<SpriteRenderer>().enabled = true;
-		theta = Phase*Mathf.Deg2Rad;
+		//theta = Phase * Mathf.Deg2Rad;
 		sawAudio.Play();
 		
 		sparkPS.enableEmission = true;
@@ -151,11 +162,39 @@ public class Saw : MonoBehaviour
 	void StopSawing()
 	{
 		isSawing = false;
+		//fixme ? 
+		//saw.GetComponent<SpriteRenderer>().enabled = false;
+		//sit.GetComponent<SpriteRenderer>().enabled = true;
+		//kneel.GetComponent<SpriteRenderer>().enabled = false;
+		sawAudio.Stop();
+		sparkPS.enableEmission = false;
+	}
+
+	void Sit()
+	{
+		StopSawing ();
+
+		isSitting = true;
 		saw.GetComponent<SpriteRenderer>().enabled = false;
 		sit.GetComponent<SpriteRenderer>().enabled = true;
 		kneel.GetComponent<SpriteRenderer>().enabled = false;
-		sawAudio.Stop();
-		
-		sparkPS.enableEmission = false;
+	}
+
+	void Kneel()
+	{
+		isSitting = false;
+		saw.GetComponent<SpriteRenderer>().enabled = true;
+		sit.GetComponent<SpriteRenderer>().enabled = false;
+		kneel.GetComponent<SpriteRenderer>().enabled = true;
+	}
+
+	public bool IsSawing()
+	{
+		return isSawing;
+	}
+
+	public bool IsSitting()
+	{
+		return isSitting;
 	}
 }
