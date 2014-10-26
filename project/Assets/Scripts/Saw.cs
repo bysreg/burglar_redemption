@@ -130,7 +130,7 @@ public class Saw : MonoBehaviour
 
 		if(BarHealth <0)
 		{
-			Application.LoadLevel (Application.loadedLevel +1);
+			sceneFader.FadeOutScene(1, () => {Application.LoadLevel(Application.loadedLevel + 1);});
 		}
 	}
 
