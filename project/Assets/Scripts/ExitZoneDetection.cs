@@ -7,11 +7,13 @@ public class ExitZoneDetection : MonoBehaviour {
 
 	Player player;
 	LastPlayerSighting lastPlayerSighting;
+	SceneFader sceneFader;
 
 	void Awake()
 	{
 		player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
 		lastPlayerSighting = GameObject.FindGameObjectWithTag("GameController").GetComponent<LastPlayerSighting>();
+		sceneFader = GameObject.Find("SceneFader").GetComponent<SceneFader>();
 	}
 
 	void OnTriggerEnter(Collider other)
@@ -21,13 +23,19 @@ public class ExitZoneDetection : MonoBehaviour {
 			//player reaches the goal
 			print ("goal reached");
 
+			sceneFader.FadeOutScene(2, 
+			                        () => {
+					Application.LoadLevel(Application.loadedLevel + 1);				
+				}
+			);
+
 			//now freeze the player, sound the alarm, and call the guards that are somehow near the exit zone
-			player.SetFreeze();
-			lastPlayerSighting.position = player.gameObject.transform.position;
-			foreach(var guard in supriseGuards)
-			{
-				guard.SetActive(true);
-			}
+//			player.SetFreeze();
+//			lastPlayerSighting.position = player.gameObject.transform.position;
+//			foreach(var guard in supriseGuards)
+//			{
+//				guard.SetActive(true);
+//			}
 		}
 	}
 

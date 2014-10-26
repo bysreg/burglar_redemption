@@ -8,17 +8,27 @@ public class GameController : MonoBehaviour {
 	bool isGameOver;
 	bool initialized;
 	SceneFader sceneFader;
+	GameObject caughtText;
 
 	void Awake()
 	{
 		sceneFader = GameObject.Find("SceneFader").GetComponent<SceneFader>();
+		caughtText = GameObject.Find("CaughtText");
 	}
 
 	public void GameOver()
 	{
 		//fade the screen to black
-		isGameOver = false;
-		sceneFader.FadeOutScene();
+		if(!isGameOver)
+		{
+			isGameOver = true;
+			iTween.MoveBy(caughtText, iTween.Hash("y", -2, "easeType", "easeInOutExpo", "time", 0.5f));
+			sceneFader.FadeOutScene(2, 
+				() => {
+					Application.LoadLevel(Application.loadedLevel);				
+				}
+			);
+		}
 	}
 	
 	void Update()
@@ -26,7 +36,6 @@ public class GameController : MonoBehaviour {
 		if(!initialized)
 		{
 			sceneFader.FadeInScene();
-
 			initialized = true;
 		}
 	}

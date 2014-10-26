@@ -133,6 +133,12 @@ public class Player : MonoBehaviour
                 MoveLeft(ref direction);
             }
 
+			float speed = this.speed;
+			if(Input.GetKey(KeyCode.LeftShift))
+			{
+				speed *= 2;
+			}
+
             if (walkingDir != -1)
             {
                 rigidbody.MovePosition(transform.position + direction.normalized * speed * Time.fixedDeltaTime);
