@@ -17,7 +17,7 @@ public class CaughtRedHanded : MonoBehaviour {
 
 	void OnTriggerStay2D(Collider2D other)
 	{
-		if(saw.IsSawing())
+		if(saw.IsSawing() || !saw.IsSitting())
 		{
 			GameOver();
 		}

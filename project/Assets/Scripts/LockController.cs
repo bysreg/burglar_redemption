@@ -88,6 +88,11 @@ public class LockController : MonoBehaviour
 
 	void Update () 
 	{
+		if(Input.GetKeyDown(KeyCode.G))
+		{
+			sceneFader.FadeOutScene(1, () => {Application.LoadLevel(Application.loadedLevel + 1);});
+		}
+
 		if(!initialized)
 		{
 			sceneFader.FadeInScene();

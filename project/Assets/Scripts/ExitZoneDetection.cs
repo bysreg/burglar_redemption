@@ -23,7 +23,7 @@ public class ExitZoneDetection : MonoBehaviour {
 			//player reaches the goal
 			print ("goal reached");
 
-			sceneFader.FadeOutScene(2, 
+			sceneFader.FadeOutScene(1, 
 			                        () => {
 					Application.LoadLevel(Application.loadedLevel + 1);				
 				}

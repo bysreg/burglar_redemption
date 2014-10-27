@@ -34,7 +34,10 @@ public class PSMoveExample : MonoBehaviour
 	
 		void Update ()
 		{
-	
+			if(Input.GetKeyDown(KeyCode.G))
+			{
+				Application.LoadLevel(Application.loadedLevel + 1);
+			}
 		}
 	
 		// Update is called once per frame
