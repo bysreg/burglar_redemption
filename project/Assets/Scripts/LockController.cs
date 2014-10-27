@@ -62,6 +62,12 @@ public class LockController : MonoBehaviour
 		Parenting.target = parentName;
 		SelectedCog = GameObject.FindGameObjectWithTag (Parenting.target);
 
+		//make all other's cog disabled
+		GameObject.Find ("/Lock/CogT/BackLight").GetComponent<SpriteRenderer>().enabled = false;
+		GameObject.Find ("/Lock/CogC/BackLight").GetComponent<SpriteRenderer>().enabled = false;
+		GameObject.Find ("/Lock/CogR/BackLight").GetComponent<SpriteRenderer>().enabled = false;
+		GameObject.Find ("/Lock/CogL/BackLight").GetComponent<SpriteRenderer>().enabled = false;
+
 		SelectedCog.transform.Find ("BackLight").GetComponent<SpriteRenderer> ().enabled = true;
 	}
 
