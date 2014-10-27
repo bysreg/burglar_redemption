@@ -6,16 +6,18 @@ public class CaughtRedHanded : MonoBehaviour {
 	bool isGameOver;
 	SceneFader sceneFader;
 	GameOver gameOver;
+	Saw saw;
 
 	void Awake()
 	{
 		sceneFader = GameObject.Find("SceneFader").GetComponent<SceneFader>();
 		gameOver = GameObject.Find("GameOver").GetComponent<GameOver>();
+		saw = GameObject.Find ("saw").GetComponent<Saw> ();
 	}
 
 	void OnTriggerStay2D(Collider2D other)
 	{
-		if(Saw.isSawing)
+		if(saw.IsSawing())
 		{
 			GameOver();
 		}
@@ -24,16 +26,5 @@ public class CaughtRedHanded : MonoBehaviour {
 	void GameOver()
 	{
 		gameOver.ShowGameOver();
-//		if(!isGameOver)
-//		{
-//			isGameOver = true;
-//			sceneFader.FadeOutScene(GameOverCallback);
-//		}
 	}
-
-	void GameOverCallback()
-	{
-		Application.LoadLevel(Application.loadedLevel);
-	}
-
 }
