@@ -56,12 +56,13 @@ public class LockController : MonoBehaviour
 
 		//background
 		GameObject bg = GameObject.Find("bg");
-		float distance = bg.transform.position.z - GameObject.FindGameObjectWithTag("MainCamera").transform.position.z;
-		// for orthographic
+		float distance = bg.transform.position.z - GameObject.FindGameObjectWithTag("MainCamera").transform.position.z; // for orthographic camera
 		float height = Camera.main.orthographicSize * 2f;
 		float width = height * Screen.width * 1.0f / Screen.height;
-		//print (distance + " " + Screen.width + " " + Screen.height + " " + width + " " + height + " " + (height * Screen.width * 1.0f/ Screen.height));
 		bg.transform.localScale = new Vector3(width, height, 1);
+		print (width + " " + height);
+
+		RandomizeLock();
 	}
 
 	void SelectCog(string parentName)
@@ -116,6 +117,7 @@ public class LockController : MonoBehaviour
 		if((Input.GetKeyUp(KeyCode.W))||(Input.GetKeyUp(KeyCode.A))||(Input.GetKeyUp(KeyCode.S))||(Input.GetKeyUp(KeyCode.D)))
 		{
 			ButtonPressed = false;
+			SelectedCog.transform.Find("BackLight").GetComponent<SpriteRenderer>().enabled = false;
 			//Parenting.target = "Dummy";
 		}
 
@@ -123,24 +125,62 @@ public class LockController : MonoBehaviour
 		{
 			if(OldSensorValue > Sensor)
 			{
-				RotationLock = true;
-				CurrentAngle = SelectedCog.rigidbody2D.rotation ;
-				TargetAngle = CurrentAngle + 120f;
-				TargetAngle = Normalize (TargetAngle);
-				Omega = AngularSpeed ;
+				StartRotatingLock(false);
+				//print ("counter clockwise");
 
 			}
 			else if(OldSensorValue < Sensor)
 			{
-				RotationLock = true;
-				CurrentAngle = SelectedCog.rigidbody2D.rotation ;
-				TargetAngle = CurrentAngle - 120f;
-				TargetAngle = Normalize (TargetAngle);
-				Omega = -AngularSpeed;
+				StartRotatingLock(true);
+				//print ("clockwise");
 			}
 		}
 
 		StartCoroutine (RotateThing ());
+	}
+
+	void StartRotatingLock(bool isClockwise)
+	{
+		RotationLock = true;
+		CurrentAngle = SelectedCog.rigidbody2D.rotation;
+
+		if(isClockwise)
+		{
+			TargetAngle = Normalize(CurrentAngle - 120f);
+			Omega = -AngularSpeed;
+		}
+		else
+		{
+			TargetAngle = Normalize(CurrentAngle + 120f);
+			Omega = AngularSpeed;
+		}
+	}
+
+	void InstantRotatingLock(string lockName, bool isClockwise, int count)
+	{
+		GameObject cog;
+		if(lockName == "top")
+		{
+			cog = GameObject.FindGameObjectWithTag ("TopCog");
+		}
+		else if(lockName == "center")
+		{
+			cog = GameObject.FindGameObjectWithTag ("CentralCog");
+		}
+		else if(lockName == "left")
+		{
+			cog = GameObject.FindGameObjectWithTag ("LeftCog");
+		}
+		else if(lockName == "right")
+		{
+			cog = GameObject.FindGameObjectWithTag ("RightCog");
+		}
+		else
+		{
+			return;
+		}
+
+		//cog.
 	}
 	
 	void ResetParents()
@@ -237,5 +277,10 @@ public class LockController : MonoBehaviour
 		}
 
 		return verdict;
+	}
+
+	void RandomizeLock()
+	{
+
 	}
 }
