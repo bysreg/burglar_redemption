@@ -4,7 +4,6 @@ using Phidgets ;
 
 public class LockController : MonoBehaviour 
 {
-	public bool Emulator;
 	private bool RotationLock;
 	private bool ButtonPressed;
 	public int Sensor, OldSensorValue;
@@ -19,35 +18,58 @@ public class LockController : MonoBehaviour
 	Vector3 Clockwise= new Vector3(0,0,-120);
 	Vector3 AntiClockwise= new Vector3(0,0,-120);
 	float deltaRotationSensor = 2; // a delta value of rotation sensor to be considered there is a rotation
+	bool usePhidgets;
 
-	// Use this for initialization
 	void Start () 
 	{
 		RotationLock = false;
 		ButtonPressed = false;
 		Parenting.target = "None";
-		if(!Emulator)
+		ifk = new InterfaceKit();
+		ifk.open ();
+
+		try 
 		{
-			ifk = new InterfaceKit();
-			ifk.open ();
-			ifk.waitForAttachment(5000);
+			ifk.waitForAttachment(2000);
+			usePhidgets = true;
+			Sensor = OldSensorValue = ifk.sensors[6].Value;
 		}
-		else
+		catch(Phidgets.PhidgetException)
+		{
+			// no phidgets attached
+		}
+
+		if(!usePhidgets)
 		{
 			deltaRotationSensor = 1; // for mouse, 1 point difference is enough
+			Sensor = OldSensorValue = 500;
 		}
 
-		Sensor = OldSensorValue = 500;
+
+		GameObject.Find ("/Lock/CogT/BackLight").GetComponent<SpriteRenderer>().enabled = false;
+		GameObject.Find ("/Lock/CogC/BackLight").GetComponent<SpriteRenderer>().enabled = false;
+		GameObject.Find ("/Lock/CogR/BackLight").GetComponent<SpriteRenderer>().enabled = false;
+		GameObject.Find ("/Lock/CogL/BackLight").GetComponent<SpriteRenderer>().enabled = false;
 
 		SelectedCog = GameObject.FindGameObjectWithTag("Dummy");
+		print ("use Phidgets for lock-picking ? " + usePhidgets);
 	}
-	
-	// Update is called once per frame
+
+	void SelectCog(string parentName)
+	{
+		ButtonPressed = true;
+		ResetParents();
+		Parenting.target = parentName;
+		SelectedCog = GameObject.FindGameObjectWithTag (Parenting.target);
+
+		SelectedCog.transform.Find ("BackLight").GetComponent<SpriteRenderer> ().enabled = true;
+	}
+
 	void Update () 
 	{
 		OldSensorValue = Sensor;
 		//This part of the code modifies the value of the Sensor variable depending on how the emulator is used
-		if(Emulator == false)
+		if(usePhidgets)
 		{
 			Sensor = ifk.sensors[6].Value;
 		}
@@ -58,32 +80,23 @@ public class LockController : MonoBehaviour
 		
 		if(Input.GetKeyDown(KeyCode.W))
 		{
-			ButtonPressed = true;
-			ResetParents();
-			Parenting.target = "TopCog";
+			SelectCog("TopCog");
 		}
 
 		if(Input.GetKeyDown (KeyCode.A))
 		{
-			ButtonPressed = true;
-			ResetParents();
-			Parenting.target = "LeftCog"; 
+			SelectCog("LeftCog");
 		}
 
 		if(Input.GetKeyDown(KeyCode.S))
 		{
-			ButtonPressed = true;
-			ResetParents();
-			Parenting.target = "CentralCog";
+			SelectCog("CentralCog");
 		}
 
 		if(Input.GetKeyDown(KeyCode.D))
 		{
-			ButtonPressed = true;
-			ResetParents();
-			Parenting.target = "RightCog";
+			SelectCog("RightCog");
 		}
-
 
 		if((Input.GetKeyUp(KeyCode.W))||(Input.GetKeyUp(KeyCode.A))||(Input.GetKeyUp(KeyCode.S))||(Input.GetKeyUp(KeyCode.D)))
 		{
@@ -112,11 +125,9 @@ public class LockController : MonoBehaviour
 			}
 		}
 
-		SelectedCog = GameObject.FindGameObjectWithTag (Parenting.target);
 		StartCoroutine (RotateThing ());
 	}
-
-
+	
 	void ResetParents()
 	{
 		for(int i=0; i<9; i++)

@@ -119,7 +119,7 @@ public class Saw : MonoBehaviour
 			}
 		}
 
-		if(Input.GetKey(KeyCode.DownArrow))
+		if(Input.GetKey(KeyCode.F))
 		{
 			Sit();
 		}
