@@ -43,6 +43,24 @@ public class Player : MonoBehaviour
         footstepsSound = gameController.transform.Find("FootstepsSound").GetComponent<AudioSource>();
     }
 
+	void Start()
+	{
+		try {
+			if(PSMoveInput.MoveControllers[0].Connected)
+			{
+				this.gameController.simulateWithKeyboard = false;
+			}
+			else
+			{
+				this.gameController.simulateWithKeyboard = true;
+			}
+		}
+		catch
+		{
+			this.gameController.simulateWithKeyboard = true;
+		}
+	}
+
     void AnimWalk()
     {
         if (prevWalkingDir != walkingDir)
