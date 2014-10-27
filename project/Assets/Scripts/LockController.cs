@@ -53,6 +53,15 @@ public class LockController : MonoBehaviour
 
 		SelectedCog = GameObject.FindGameObjectWithTag("Dummy");
 		print ("use Phidgets for lock-picking ? " + usePhidgets);
+
+		//background
+		GameObject bg = GameObject.Find("bg");
+		float distance = bg.transform.position.z - GameObject.FindGameObjectWithTag("MainCamera").transform.position.z;
+		// for orthographic
+		float height = Camera.main.orthographicSize * 2f;
+		float width = height * Screen.width * 1.0f / Screen.height;
+		//print (distance + " " + Screen.width + " " + Screen.height + " " + width + " " + height + " " + (height * Screen.width * 1.0f/ Screen.height));
+		bg.transform.localScale = new Vector3(width, height, 1);
 	}
 
 	void SelectCog(string parentName)
