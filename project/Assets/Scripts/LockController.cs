@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using Phidgets ;
 
 public class LockController : MonoBehaviour 
@@ -19,9 +21,12 @@ public class LockController : MonoBehaviour
 	Vector3 AntiClockwise= new Vector3(0,0,-120);
 	float deltaRotationSensor = 2; // a delta value of rotation sensor to be considered there is a rotation
 	bool usePhidgets;
+	SceneFader sceneFader;
+	bool initialized;
 
 	void Start () 
 	{
+		sceneFader = GameObject.Find ("SceneFader").GetComponent<SceneFader>();
 		RotationLock = false;
 		ButtonPressed = false;
 		Parenting.target = "None";
@@ -83,8 +88,15 @@ public class LockController : MonoBehaviour
 
 	void Update () 
 	{
+		if(!initialized)
+		{
+			sceneFader.FadeInScene();
+			initialized = true;
+			return;
+		}
+
 		OldSensorValue = Sensor;
-		//This part of the code modifies the value of the Sensor variable depending on how the emulator is used
+
 		if(usePhidgets)
 		{
 			Sensor = ifk.sensors[6].Value;
@@ -180,7 +192,20 @@ public class LockController : MonoBehaviour
 			return;
 		}
 
-		//cog.
+		GameObject[] leaves = FindLeavesInsideCog(cog);
+		for(int i=0; i<3; i++)
+		{
+			leaves[i].transform.parent = cog.transform;
+		}
+
+		if(isClockwise)
+		{
+			cog.transform.Rotate(new Vector3(0, 0, -120 * count));
+		}
+		else
+		{
+			cog.transform.Rotate(new Vector3(0, 0, 120 * count));
+		}
 	}
 	
 	void ResetParents()
@@ -195,16 +220,20 @@ public class LockController : MonoBehaviour
 	{
 		SelectedCog.rigidbody2D.rotation = Normalize (SelectedCog.rigidbody2D.rotation);
 		
-		if(RotationLock == true)
+		if(RotationLock)
 		{
 			SelectedCog.rigidbody2D.MoveRotation(SelectedCog.rigidbody2D.rotation + Time.deltaTime * Omega);
 			yield return new WaitForSeconds (Time.deltaTime);
 		}
 		
-		if(Mathf.Abs(SelectedCog.rigidbody2D.rotation - TargetAngle ) < Mathf.Abs(2*Omega*Time.deltaTime) )
+		if(RotationLock && Mathf.Abs(SelectedCog.rigidbody2D.rotation - TargetAngle ) < Mathf.Abs(2*Omega*Time.deltaTime) )
 		{
-			RotationLock =false;
+			RotationLock = false;
 			SelectedCog.rigidbody2D.MoveRotation(TargetAngle);
+			if(CheckIsWin())
+			{
+				sceneFader.FadeOutScene(1, () => {Application.LoadLevel(Application.loadedLevel + 1);});
+			}
 		}
 		
 		yield return new WaitForSeconds (0f);
@@ -224,63 +253,49 @@ public class LockController : MonoBehaviour
 		
 		return angle;
 	}
-
-	bool HasWon()
+	
+	bool CheckIsWin()
 	{
-		bool verdict = true; 
+		return CheckCog(GameObject.FindGameObjectWithTag("TopCog"), "LeafR") &&
+			CheckCog(GameObject.FindGameObjectWithTag("RightCog"), "LeafG") &&
+			CheckCog(GameObject.FindGameObjectWithTag("LeftCog"), "LeafB");
+	}
 
-		if(RotationLock == false)
+	bool CheckCog(GameObject cog, string leafName)
+	{
+		GameObject[] leavesInside = FindLeavesInsideCog(cog);
+		foreach(var leaf in leavesInside)
 		{
-			GameObject temp;
-			Transform temp2;
-
-			temp = GameObject.FindGameObjectWithTag("LeftCog");
-			Parenting.target = "LeftCog";
-
-			for (int i=0; i<3; i++)
-			{
-				temp2 =temp.transform.GetChild(i);
-				if(temp2.name != "LeafB")
-				{
-					verdict= false;
-				}
-			}	
-
-			temp = GameObject.FindGameObjectWithTag("TopCog");
-			Parenting.target = "TopCog";
-			
-			for (int i=0; i<3; i++)
-			{
-				temp2 =temp.transform.GetChild(i);
-				if(temp2.name != "LeafR")
-				{
-					verdict= false;
-				}
-			}	
-
-			temp = GameObject.FindGameObjectWithTag("RightCog");
-			Parenting.target = "RightCog";
-			
-			for (int i=0; i<3; i++)
-			{
-				temp2 =temp.transform.GetChild(i);
-				if(temp2.name != "LeafG")
-				{
-					verdict= false;
-				}
-			}	
+			if(leaf.name != leafName)
+				return false;
 		}
 
-		else
-		{
-			verdict = false;
-		}
-
-		return verdict;
+		return true;
 	}
 
 	void RandomizeLock()
 	{
+		InstantRotatingLock("center", true, 1);
+		InstantRotatingLock("left", true, 2);
+		InstantRotatingLock("right", true, 2);
+		InstantRotatingLock("top", true, 2);
+	}
 
+	GameObject[] FindLeavesInsideCog(GameObject cog)
+	{
+		GameObject[] ret = new GameObject[3];
+		CircleCollider2D col = cog.GetComponent<CircleCollider2D>();
+		float sqrRadius = col.radius * col.radius;
+		int count = 0;
+
+		for(int i=0; i<Leaves.Length; i++)
+		{
+			if((Leaves[i].transform.position - cog.transform.position).sqrMagnitude <= sqrRadius)
+			{
+				ret[count++] = Leaves[i];
+			}
+		}
+
+		return ret;
 	}
 }
