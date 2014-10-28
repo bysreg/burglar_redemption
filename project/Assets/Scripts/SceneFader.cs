@@ -4,11 +4,11 @@ using System.Collections;
 
 public class SceneFader : MonoBehaviour {
 
-	public float fadeTime;
-
+	float fadeTime;
 	bool isFading;
 	float targetAlpha;
 	float vel;
+	Action callback;
 
 	void Awake()
 	{
@@ -32,6 +32,11 @@ public class SceneFader : MonoBehaviour {
 				{
 					guiTexture.enabled = false;
 				}
+
+				if(callback != null)
+				{
+					callback();
+				}
 			}
 		}
 	}
@@ -41,22 +46,16 @@ public class SceneFader : MonoBehaviour {
 		guiTexture.enabled = true;
 		isFading = true;
 		targetAlpha = 0f;
+		fadeTime = 1f;
 	}
 
-	public void FadeOutScene(Action callback = null)
+	public void FadeOutScene(float time = 1f, Action callback = null)
 	{
+		this.callback = callback;
 		guiTexture.enabled = true;
 		isFading = true;
 		targetAlpha = 1f;
-
-		if(callback != null)
-		{
-			callback();
-		}
-		else
-		{
-			Application.LoadLevel(Application.loadedLevel + 1);
-		}
+		fadeTime = time;
 	}
 
 }

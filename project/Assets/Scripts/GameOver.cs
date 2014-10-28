@@ -41,7 +41,7 @@ public class GameOver : MonoBehaviour {
 
 			if(time >= 1)
 			{
-				sceneFader.FadeOutScene(() => {Application.LoadLevel(Application.loadedLevel);});
+				sceneFader.FadeOutScene(1, () => {Application.LoadLevel(Application.loadedLevel);});
 			}
 		}
 	}
