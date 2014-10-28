@@ -23,7 +23,7 @@ public class GameController : MonoBehaviour {
 		{
 			isGameOver = true;
 			iTween.MoveBy(caughtText, iTween.Hash("y", -2, "easeType", "easeInOutExpo", "time", 0.5f));
-			sceneFader.FadeOutScene(2, 
+			sceneFader.FadeOutScene(1, 
 				() => {
 					Application.LoadLevel(Application.loadedLevel);				
 				}

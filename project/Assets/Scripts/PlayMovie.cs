@@ -3,8 +3,9 @@ using System.Collections;
 
 public class PlayMovie : MonoBehaviour {
 
+	public bool stopAfterFinish; // dont automatically go to the next scene if this is true
 	MovieTexture movie;
-
+	
 	void Start()
 	{
 		movie = renderer.material.mainTexture as MovieTexture;
@@ -24,7 +25,10 @@ public class PlayMovie : MonoBehaviour {
 	{
 		if (!movie.isPlaying)
 		{
-			Application.LoadLevel (Application.loadedLevel +1);
+			if(!stopAfterFinish)
+			{
+				Application.LoadLevel (Application.loadedLevel +1);
+			}
 		}
 
 		if(Input.GetKeyDown(KeyCode.Space))
