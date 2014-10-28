@@ -43,7 +43,7 @@ public class Saw : MonoBehaviour
 		theta = 0f;
 		root = transform.position;
 		isSawing = false;
-		BarHealth = 100.0f;
+		BarHealth = 400.0f;
 		DamageRate = 10.0f;
 		kneel.GetComponent<SpriteRenderer>().enabled = false;
 		saw.GetComponent<SpriteRenderer>().enabled = false;
