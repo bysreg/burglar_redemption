@@ -23,6 +23,7 @@ public class LockController : MonoBehaviour
 	bool usePhidgets;
 	SceneFader sceneFader;
 	bool initialized;
+	AudioSource lockTickSound;	
 
 	void Start () 
 	{
@@ -66,6 +67,8 @@ public class LockController : MonoBehaviour
 		float width = height * Screen.width * 1.0f / Screen.height;
 		bg.transform.localScale = new Vector3(width, height, 1);
 		print (width + " " + height);
+
+		lockTickSound = this.gameObject.GetComponentInChildren<AudioSource>();
 
 		RandomizeLock();
 	}
@@ -171,6 +174,8 @@ public class LockController : MonoBehaviour
 			TargetAngle = Normalize(CurrentAngle + 120f);
 			Omega = AngularSpeed;
 		}
+
+		lockTickSound.Play();
 	}
 
 	void InstantRotatingLock(string lockName, bool isClockwise, int count)
@@ -234,6 +239,7 @@ public class LockController : MonoBehaviour
 		if(RotationLock && Mathf.Abs(SelectedCog.rigidbody2D.rotation - TargetAngle ) < Mathf.Abs(2*Omega*Time.deltaTime) )
 		{
 			RotationLock = false;
+			lockTickSound.Stop();
 			SelectedCog.rigidbody2D.MoveRotation(TargetAngle);
 			if(CheckIsWin())
 			{
