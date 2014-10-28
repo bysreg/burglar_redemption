@@ -94,10 +94,10 @@ public class Player : MonoBehaviour
         if (walkingDir != -1)
         {
             //play footsteps sound
-            if (!footstepsSound.isPlaying)
-            {
-                footstepsSound.Play();
-            }
+//            if (!footstepsSound.isPlaying)
+//            {
+//                footstepsSound.Play();
+//            }
 
             animTime += Time.fixedDeltaTime;
             if (animTime >= frameTime)
